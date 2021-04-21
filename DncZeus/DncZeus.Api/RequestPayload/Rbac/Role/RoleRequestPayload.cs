@@ -7,20 +7,20 @@
 
 using static DncZeus.Api.Entities.Enums.CommonEnum;
 
-namespace DncZeus.Api.RequestPayload.Rbac.Role
+namespace DncZeus.Api.RequestPayload.Rbac.TaskList
 {
     /// <summary>
     /// 
     /// </summary>
-    public class RoleRequestPayload : RequestPayload
+    public class TaskListRequestPayload : RequestPayload
     {
         /// <summary>
         /// 是否已被删除
         /// </summary>
-        public IsDeleted IsDeleted { get; set; }
-        /// <summary>
+        public int IsDeleted { get; set; }
+    /*    /// <summary>
         /// 状态
         /// </summary>
-        public Status Status { get; set; }
+        public Status Status { get; set; }*/
     }
 }

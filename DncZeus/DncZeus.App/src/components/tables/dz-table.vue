@@ -2,35 +2,31 @@
   <div class="dnc-table-wrap">
     <slot name="searcher">
       <div v-if="searchable && searchPlace === 'top'" class="search-con search-con-top">
-        <Input
-          @on-change="handleClear"
-          clearable
-          placeholder="输入关键字搜索"
-          class="search-input"
-          v-model="searchValue"
-        />
+        <Input @on-change="handleClear"
+               clearable
+               placeholder="输入关键字搜索"
+               class="search-input"
+               v-model="searchValue" />
         <Button @click="handleSearch" class="search-btn" type="primary">
-          <Icon type="search"/>&nbsp;&nbsp;搜索
+          <Icon type="search" />&nbsp;&nbsp;搜索
         </Button>
       </div>
     </slot>
     <slot name="table">暂无数据</slot>
     <div style="margin-top:15px;">
       <slot name="pager">
-        <Page
-          :total="totalCount"
-          :page-size="pageSize"
-          size="small"
-          show-elevator
-          show-sizer
-          show-total
-          :page-size-opts="pageSizeOpts"
-          @on-change="onPageChanged"
-          @on-page-size-change="onPageSizeChanged"
-        ></Page>
+        <Page :total="totalCount"
+              :page-size="pageSize"
+              size="small"
+              show-elevator
+              show-sizer
+              show-total
+              :page-size-opts="pageSizeOpts"
+              @on-change="onPageChanged"
+              @on-page-size-change="onPageSizeChanged"></Page>
       </slot>
     </div>
-  </div>
+  </div> 
 </template>
 <script>
 export default {

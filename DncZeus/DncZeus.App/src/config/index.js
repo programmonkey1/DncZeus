@@ -2,7 +2,7 @@ export default {
   /**
    * @description 配置显示在浏览器标签的title
    */
-  title: 'DncZeus通用后台权限管理框架',
+  title: '运维统计管理系统',
   /**
    * @description token在Cookie中存储的天数，默认1天
    */
@@ -17,13 +17,13 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'http://localhost:54321/',
-    pro: 'http://localhost:54321/',
+    dev: 'http://192.168.1.217:54321/',
+    pro: 'http://192.168.1.217:54321/',
     defaultPrefix:"api/v1/"
   },
   authUrl: {
-    dev: 'http://localhost:54321/api/oauth/auth',
-    pro: 'http://localhost:54321/api/oauth/auth'
+    dev: 'http://192.168.1.217:54321/api/oauth/auth',
+    pro: 'http://192.168.1.217:54321/api/oauth/auth'
   },
   /**
    * @description 默认打开的首页的路由name值，默认为home

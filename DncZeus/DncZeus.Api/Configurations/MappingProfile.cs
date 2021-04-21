@@ -11,6 +11,7 @@ using DncZeus.Api.ViewModels.Rbac.DncIcon;
 using DncZeus.Api.ViewModels.Rbac.DncMenu;
 using DncZeus.Api.ViewModels.Rbac.DncPermission;
 using DncZeus.Api.ViewModels.Rbac.DncRole;
+using DncZeus.Api.ViewModels.Rbac.DncTaskList;
 using DncZeus.Api.ViewModels.Rbac.DncUser;
 
 namespace DncZeus.Api.Configurations
@@ -32,7 +33,7 @@ namespace DncZeus.Api.Configurations
             #endregion
 
             #region DncRole
-            CreateMap<DncRole, RoleJsonModel>();
+            CreateMap<DncRole, TaskListJsonModel>();
             CreateMap<RoleCreateViewModel, DncRole>(); 
             #endregion
 

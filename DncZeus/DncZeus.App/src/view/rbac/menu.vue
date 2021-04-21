@@ -172,6 +172,7 @@
                 <Option
                   v-for="(icon, index) in stores.menu.sources.iconSources.data"
                   :value="icon.code"
+                  :label="icon.code"
                   :key="index"
                 >
                   <Icon :type="icon.code" :color="icon.color" :size="24"/>
@@ -181,9 +182,9 @@
             </FormItem>
           </Col>
           <Col span="12">
-            <FormItem>
-              <Icon :type="formModel.fields.icon" :size="32"/>
-            </FormItem>
+          <FormItem>
+            <Icon :type="formModel.fields.icon" :size="32" />
+          </FormItem>
           </Col>
         </Row>
         <Row>

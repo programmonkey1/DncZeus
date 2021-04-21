@@ -114,12 +114,12 @@ WHERE P.IsDeleted=0 AND P.Status=1";
             var strSql = @"SELECT M.* FROM DncRolePermissionMapping AS RPM 
 LEFT JOIN DncPermission AS P ON P.Code = RPM.PermissionCode
 INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
-WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping AS URM WHERE URM.UserGuid={0} AND URM.RoleCode=RPM.RoleCode)";
+WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping AS URM WHERE URM.UserGuid={0} AND URM.RoleCode=RPM.RoleCode) order by M.Sort";
 
             if (AuthContextService.CurrentUser.UserType == UserType.SuperAdministrator)
             {
                 //如果是超级管理员
-                strSql = @"SELECT * FROM DncMenu WHERE IsDeleted=0 AND Status=1";
+                strSql = @"SELECT * FROM DncMenu WHERE IsDeleted=0 AND Status=1 order by Sort ";
             }
             var menus = _dbContext.DncMenu.FromSql(strSql, AuthContextService.CurrentUser.Guid).ToList();
             var rootMenus = _dbContext.DncMenu.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal && x.ParentGuid == Guid.Empty).ToList();

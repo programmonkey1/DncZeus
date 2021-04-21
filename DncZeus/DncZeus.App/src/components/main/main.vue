@@ -20,8 +20,8 @@
         <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
         <div class="logo-con">
           <!-- <img v-show="!collapsed" :src="maxLogo" key="max-logo"> -->
-          <span v-show="!collapsed" style="color:#fff;font-size:26px;font-weight:700;text-align:center;display:block;letter-spacing:2px;padding-top:8px;">DncZeus</span>
-          <span v-show="collapsed" style="color:#fff;font-size:30px;font-weight:700;text-align:center;display:block;padding-top:5px;">DZ</span>
+          <span v-show="!collapsed" style="color:#fff;font-size:26px;font-weight:700;text-align:center;display:block;letter-spacing:2px;padding-top:8px;">运维管理</span>
+          <span v-show="collapsed" style="color:#fff;font-size:30px;font-weight:700;text-align:center;display:block;padding-top:5px;">DO</span>
           <!-- <img v-show="collapsed" :src="minLogo" key="min-logo"> -->
         </div>
       </side-menu>
@@ -29,34 +29,28 @@
     <Layout>
       <Header class="header-con">
         <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
-          <user :message-unread-count="unreadCount" :user-avator="userAvator"/>
-          <language
-            v-if="$config.useI18n"
-            @on-lang-change="setLocal"
-            style="margin-right: 10px;"
-            :lang="local"
-          />
-          <error-store
-            v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader"
-            :has-read="hasReadErrorPage"
-            :count="errorCount"
-          ></error-store>
-          <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
+          <user :message-unread-count="unreadCount" :user-avator="userAvator" />
+          <language v-if="$config.useI18n"
+                    @on-lang-change="setLocal"
+                    style="margin-right: 10px;"
+                    :lang="local" />
+          <error-store v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader"
+                       :has-read="hasReadErrorPage"
+                       :count="errorCount"></error-store>
+          <fullscreen v-model="isFullscreen" style="margin-right: 10px;" />
         </header-bar>
       </Header>
       <Content class="main-content-con">
         <Layout class="main-layout-con">
           <div class="tag-nav-wrapper">
-            <tags-nav
-              :value="$route"
-              @input="handleClick"
-              :list="tagNavList"
-              @on-close="handleCloseTag"
-            />
+            <tags-nav :value="$route"
+                      @input="handleClick"
+                      :list="tagNavList"
+                      @on-close="handleCloseTag" />
           </div>
           <Content class="content-wrapper">
             <keep-alive :include="cacheList">
-              <router-view/>
+              <router-view />
             </keep-alive>
             <ABackTop :height="100" :bottom="80" :right="50" container=".content-wrapper"></ABackTop>
           </Content>
@@ -78,7 +72,8 @@ import { mapMutations, mapActions, mapGetters } from "vuex";
 import { getNewTagList, getNextRoute, routeEqual } from "@/libs/util";
 import routers from "@/router/routers";
 import minLogo from "@/assets/images/logo-min.jpg";
-import maxLogo from "@/assets/images/logo.jpg";
+  import maxLogo from "@/assets/images/logo.jpg";
+
 import "./main.less";
 export default {
   name: "Main",

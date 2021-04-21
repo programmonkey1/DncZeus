@@ -30,7 +30,7 @@ using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
-
+//Scaffold-DbContext "Data Source=.;Initial Catalog=DncZeus;User ID=sa;Password=sa" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities -Tables AfterView  -Force
 namespace DncZeus.Api
 {
     public class Startup
@@ -82,10 +82,10 @@ namespace DncZeus.Api
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<DncZeusDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                 // 如果使用SQL Server 2008数据库，请添加UseRowNumberForPaging的选项
                 // 参考资料:https://github.com/aspnet/EntityFrameworkCore/issues/4616
-                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),b=>b.UseRowNumberForPaging())
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),b=>b.UseRowNumberForPaging())
                 );
 
             services.AddSwaggerGen(c =>
