@@ -7,6 +7,13 @@ export const getWorkTaskList = (data) => {
     data
   })
 }
+export const gettimeList = (data) => {
+  return axios.request({
+    url: 'rbac/datalist/list',
+    method: 'get',
+    data
+  })
+}
 
 // createWorkTask
 export const createWorkTask = (data) => {

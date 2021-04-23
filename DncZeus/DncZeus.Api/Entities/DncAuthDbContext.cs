@@ -79,6 +79,10 @@ namespace DncZeus.Api.Entities
         /// 工作任务
         /// </summary>
         public DbSet<DncWorkTask> DncWorkTask { get; set; }
+        /// <summary>
+        /// 日期表
+        /// </summary>
+        public DbSet<DataList> DataList { get; set; }
 
         /// <summary>
         /// 用户-角色多对多映射

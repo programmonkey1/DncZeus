@@ -15,6 +15,7 @@ namespace DncZeus.Api.Entities
         public DateTime? TaskTime { get; set; }
         public string CompletionTime { get; set; }
         public string TaskPlan { get; set; }
+        public string PlanList { get; set; }
         public DateTime? ProgressDeviation { get; set; }
         public string InformationNote { get; set; }
         public string ThirdPartyCooperation { get; set; }

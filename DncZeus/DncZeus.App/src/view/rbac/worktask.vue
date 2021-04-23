@@ -7,9 +7,9 @@
               :border="false"
               size="small"
               search-place="top"
-              v-model="stores.deviceinformation.data"
-              :totalCount="stores.deviceinformation.query.totalCount"
-              :columns="stores.deviceinformation.columns"
+              v-model="stores.worktask.data"
+              :totalCount="stores.worktask.query.totalCount"
+              :columns="stores.worktask.columns"
               @on-delete="handleDelete"
               @on-edit="handleEdit"
               @on-select="handleSelect"
@@ -27,26 +27,26 @@
                   <Input type="text"
                          search
                          :clearable="true"
-                         v-model="stores.deviceinformation.query.kw"
+                         v-model="stores.worktask.query.kw"
                          placeholder="输入关键字搜索..."
                          @on-search="handleSearchRole()">
                   <Select slot="prepend"
-                          v-model="stores.deviceinformation.query.isDeleted"
+                          v-model="stores.worktask.query.isDeleted"
                           @on-change="handleSearchRole"
                           placeholder="删除状态"
                           style="width:60px;">
-                    <Option v-for="item in stores.deviceinformation.sources.isDeletedSources"
+                    <Option v-for="item in stores.worktask.sources.isDeletedSources"
                             :value="item.value"
                             :key="item.value">
                       {{item.text}}
                     </Option>
                   </Select>
                   <Select slot="prepend"
-                          v-model="stores.deviceinformation.query.status"
+                          v-model="stores.worktask.query.status"
                           @on-change="handleSearchRole"
                           placeholder="角色状态"
                           style="width:60px;">
-                    <Option v-for="item in stores.deviceinformation.sources.statusSources"
+                    <Option v-for="item in stores.worktask.sources.statusSources"
                             :value="item.value"
                             :key="item.value">
                       {{item.text}}
@@ -172,9 +172,9 @@
                     remote
                     @on-change="handleEcutablekeyword"
                     :remote-method="handleLoadEcutableDataSource"
-                    :loading="stores.deviceinformation.sources.ecutableSources.loading"
+                    :loading="stores.worktask.sources.ecutableSources.loading"
                     placeholder="请选择电子单元产品编号...">
-              <Option v-for="(item , Ecutableindex) in stores.deviceinformation.sources.ecutableSources.data"
+              <Option v-for="(item , Ecutableindex) in stores.worktask.sources.ecutableSources.data"
                       :value="Ecutableindex"
                       :label="item.electronicUnitNumber"
                       :key="Ecutableindex">
@@ -194,9 +194,9 @@
                     remote
                     @on-change="handleBasetablekeyword"
                     :remote-method="handleLoadBasetableDataSource"
-                    :loading="stores.deviceinformation.sources.basetableSources.loading"
+                    :loading="stores.worktask.sources.basetableSources.loading"
                     placeholder="请选择水表批次编号...">
-              <Option v-for="(item , Basetableindex) in stores.deviceinformation.sources.basetableSources.data"
+              <Option v-for="(item , Basetableindex) in stores.worktask.sources.basetableSources.data"
                       :value="Basetableindex"
                       :label="item.batchNumber"
                       :key="Basetableindex">
@@ -234,17 +234,18 @@
 
 <script>import Tables from "_c/tables";
 import {
-  getRoleList,
-  createRole,
-  loadRole,
-  editRole,
-  deleteRole,
-  batchCommand
-  } from "@/api/rbac/deviceInformation";
+  getWorkTaskList,
+  createWorkTask,
+  loadWorkTask,
+  editWorkTask,
+  deleteWorkTask,
+  batchCommand,
+  gettimeList,
+  } from "@/api/rbac/worktask";
   import { findEcutableDataSourceByKeyword } from "@/api/rbac/ECUTable";
   import { findbasetableDataSourceByKeyword } from "@/api/rbac/basetable";
 export default {
-    name: "rbac_deviceInformation_page",
+    name: "rbac_worktask_page",
   components: {
     Tables
   },
@@ -294,7 +295,7 @@ export default {
         }
       },
       stores: {
-        deviceinformation: {
+        worktask: {
           query: {
             totalCount: 0,
             pageSize: 20,
@@ -337,161 +338,70 @@ export default {
           },
           columns: [
             { type: "selection", width: 50, key: "handle" },
-
-            { title: "设备编号", key: "eunumber", width: 90, sortable: true },
-            {
-              title: "状态",
-              key: "status",
-              align: "center",
-              width: 80,
-              render: (h, params) => {
-                let status = params.row.status;
-                let statusColor = "success";
-                let statusText = "正常";
-                switch (status) {
-                  case 0:
-                    statusText = "禁用";
-                    statusColor = "default";
-                    break;
-                }
-                return h(
-                  "Tooltip",
-                  {
-                    props: {
-                      placement: "top",
-                      transfer: true,
-                      delay: 500
-                    }
-                  },
-                  [
-                    //这个中括号表示是Tooltip标签的子标签
-                    h(
-                      "Tag",
-                      {
-                        props: {
-                          //type: "dot",
-                          color: statusColor
+            { title: "序号", key: "id", width: 50, sortable: true, ellipsis: true, tooltip: true },
+            { title: "主题", key: "taskTheme", width: 150, sortable: true, ellipsis: true, tooltip: true },
+            { title: "任务内容", key: "taskContent", width: 200, sortable: true, ellipsis: true, tooltip: true },
+            { title: "类型", key: "workType",
+            width: 100, sortable: true,
+            render:(h,params)=>{
+                        let workType = params.row.workType
+                        if(workType==0){
+                            workType = '重要任务'
+                        }else if(workType==1){
+                            workType = '一般任务'
+                        }else if(workType ==2){
+                            workType = '次要任务'
                         }
-                      },
-                      statusText
-                    ), //表格列显示文字
-                    h(
-                      "p",
-                      {
-                        slot: "content",
-                        style: {
-                          whiteSpace: "normal"
-                        }
-                      },
-                      statusText //整个的信息即气泡内文字
-                    )
-                  ]
-                );
-              }
-            },
-            {
-              title: "操作",
-              align: "center",
-              key: "handle",
-              width: 80,
-              className: "table-command-column",
-              options: ["edit"],
-              button: [
-                (h, params, vm) => {
-                  return h(
-                    "Poptip",
-                    {
-                      props: {
-                        confirm: true,
-                        title: "你确定要删除吗?"
-                      },
-                      on: {
-                        "on-ok": () => {
-                          vm.$emit("on-delete", params);
-                        }
-                      }
+                        return h('span',workType)
                     },
-                    [
-                      h(
-                        "Tooltip",
-                        {
-                          props: {
-                            placement: "left",
-                            transfer: true,
-                            delay: 1000
-                          }
-                        },
-                        [
-                          h("Button", {
-                            props: {
-                              shape: "circle",
-                              size: "small",
-                              icon: "md-trash",
-                              type: "error"
-                            }
-                          }),
-                          h(
-                            "p",
-                            {
-                              slot: "content",
-                              style: {
-                                whiteSpace: "normal"
-                              }
-                            },
-                            "删除"
-                          )
-                        ]
-                      )
-                    ]
-                  );
-                },
-                (h, params, vm) => {
-                  return h(
-                    "Tooltip",
-                    {
-                      props: {
-                        placement: "left",
-                        transfer: true,
-                        delay: 1000
-                      }
-                    },
-                    [
-                      h("Button", {
-                        props: {
-                          shape: "circle",
-                          size: "small",
-                          icon: "md-create",
-                          type: "primary"
-                        },
-                        on: {
-                          click: () => {
-                            vm.$emit("on-edit", params);
-                            vm.$emit("input", params.tableData);
-                          }
-                        }
-                      }),
-                      h(
-                        "p",
-                        {
-                          slot: "content",
-                          style: {
-                            whiteSpace: "normal"
-                          }
-                        },
-                        "编辑"
-                      )
-                    ]
-                  );
-                }
-              ]
             },
-            { title: "产品型号", key: "productModel", width: 120, sortable: true },
-            { title: "电子单元编号", key: "electronicUnitNumber", width: 150, sortable: true },
-            { title: "基表批次编号", key: "batchNumber", width: 150, sortable: true },
-            { title: "生产日期", key: "dateOfManufacture", width: 150, sortable: true, ellipsis: true, tooltip: true },
-            { title: "备注", key: "remarks", width: 200, sortable: true, ellipsis: true, tooltip: true }
-
-
+            { title: "1",
+             key: "nO1", 
+             width: 30, 
+             ellipsis: true, 
+             tooltip: true,
+            },
+            { title: "2", key: "nO2", width: 30, ellipsis: true, tooltip: true },
+            { title: "3", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "4", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "5", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "6", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "7", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "8", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "9", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "10", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "11", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "12", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "13", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "14", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "15", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "16", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "17", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "18", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "19", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "20", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "21", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "22", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "23", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "24", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "25", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "26", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "27", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "28", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "29", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "30", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "31", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "任务人", key: "taskPerson", width: 80, sortable: true, ellipsis: true, tooltip: true },
+            { title: "联系电话", key: "telephone", width: 100, ellipsis: true, tooltip: true },
+            { title: "任务时间", key: "taskTime", width: 150, sortable: true, ellipsis: true, tooltip: true },
+            { title: "完成时间节点", key: "completionTime", width: 150,ellipsis: true, tooltip: true },
+            
+            { title: "进度偏离", key: "progressDeviation", width: 150, ellipsis: true, tooltip: true },
+            { title: "情况说明", key: "informationNote", width: 150, ellipsis: true, tooltip: true },
+            { title: "第三方配合事项", key: "thirdPartyCooperation", width: 150, ellipsis: true, tooltip: true },
+            { title: "注意事项", key: "mattersNeedingAttention", width: 150,ellipsis: true, tooltip: true },
+            { title: "项目经理", key: "projectManager", width: 100, ellipsis: true, tooltip: true },
+            { title: "发布人", key: "publisher", width: 100,ellipsis: true, tooltip: true }
           ],
           data: []
         }
@@ -523,18 +433,23 @@ export default {
   },
   methods: {
     loadRoleList() {
-      getRoleList(this.stores.deviceinformation.query).then(res => {
-        this.stores.deviceinformation.data = res.data.data;
+      getWorkTaskList(this.stores.worktask.query).then(res => {
+        this.stores.worktask.data = res.data.data;
         console.log(res.data.data )
-        this.stores.deviceinformation.query.totalCount = res.data.totalCount;
+        this.stores.worktask.query.totalCount = res.data.totalCount;
+      });
+      gettimeList(this.stores.datalist.query).then(res => {
+        this.stores.datalist.data = res.data.data;
+        console.log(res.data.data )
+        this.stores.datalist.query.totalCount = res.data.totalCount;
       });
     },
     exportData() {
       this.$refs.tables.exportCsv({
         filename: "电子单元信息",
         original: false,
-        columns: this.stores.deviceinformation.columns,
-        data: this.stores.deviceinformation.data
+        columns: this.stores.worktask.columns,
+        data: this.stores.worktask.data
       });
     },
     handleFormatError(file) {
@@ -599,7 +514,7 @@ export default {
       this.$refs["formRole"].resetFields();
     },
     doCreateRole() {
-      createRole(this.formModel.fields).then(res => {
+      createWorkTask(this.formModel.fields).then(res => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.loadRoleList();
@@ -610,7 +525,7 @@ export default {
       });
     },
     doEditRole() {
-      editRole(this.formModel.fields).then(res => {
+      editWorkTask(this.formModel.fields).then(res => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.loadRoleList();
@@ -633,7 +548,7 @@ export default {
       return _valid;
     },
     doLoadRole(diid) {
-      loadRole({ diid: diid }).then(res => {
+      loadWorkTask({ diid: diid }).then(res => {
         this.formModel.fields = res.data.data;
       });
     },
@@ -645,7 +560,7 @@ export default {
         this.$Message.warning("请选择至少一条数据");
         return;
       }
-      deleteRole(ids).then(res => {
+      deleteWorkTask(ids).then(res => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.loadRoleList();
@@ -696,41 +611,41 @@ export default {
       return "";
     },
     handlePageChanged(page) {
-      this.stores.deviceinformation.query.currentPage = page;
+      this.stores.worktask.query.currentPage = page;
       this.loadRoleList();
     },
     handlePageSizeChanged(pageSize) {
-      this.stores.deviceinformation.query.pageSize = pageSize;
+      this.stores.worktask.query.pageSize = pageSize;
       this.loadRoleList();
     },
     handleEcutablekeyword() {
-      this.formModel.fields.ecuid = this.stores.deviceinformation.sources.ecutableSources.data[this.formModel.fields.Ecutableindex].ecuid;
-      this.formModel.fields.electronicUnitNumber = this.stores.deviceinformation.sources.ecutableSources.data[this.formModel.fields.Ecutableindex].electronicUnitNumber;
-      this.formModel.fields.eunumber = this.stores.deviceinformation.sources.ecutableSources.data[this.formModel.fields.Ecutableindex].electronicUnitNumber;
+      this.formModel.fields.ecuid = this.stores.worktask.sources.ecutableSources.data[this.formModel.fields.Ecutableindex].ecuid;
+      this.formModel.fields.electronicUnitNumber = this.stores.worktask.sources.ecutableSources.data[this.formModel.fields.Ecutableindex].electronicUnitNumber;
+      this.formModel.fields.eunumber = this.stores.worktask.sources.ecutableSources.data[this.formModel.fields.Ecutableindex].electronicUnitNumber;
       //console.log(this.formModel.fields.ecuid)
     },
     handleLoadEcutableDataSource(keyword) {
-      this.stores.deviceinformation.sources.ecutableSources.loading = true;
+      this.stores.worktask.sources.ecutableSources.loading = true;
       let query = { keyword: keyword };
       findEcutableDataSourceByKeyword(query).then(res => {
  
-        this.stores.deviceinformation.sources.ecutableSources.data = res.data.data;
-        this.stores.deviceinformation.sources.ecutableSources.loading = false;
+        this.stores.worktask.sources.ecutableSources.data = res.data.data;
+        this.stores.worktask.sources.ecutableSources.loading = false;
         
       });
     },
     handleBasetablekeyword() {
-      this.formModel.fields.btid = this.stores.deviceinformation.sources.basetableSources.data[this.formModel.fields.Basetableindex].btid;
-      this.formModel.fields.batchNumber = this.stores.deviceinformation.sources.basetableSources.data[this.formModel.fields.Basetableindex].batchNumber;
+      this.formModel.fields.btid = this.stores.worktask.sources.basetableSources.data[this.formModel.fields.Basetableindex].btid;
+      this.formModel.fields.batchNumber = this.stores.worktask.sources.basetableSources.data[this.formModel.fields.Basetableindex].batchNumber;
       //console.log(this.formModel.fields.ecuid)
     },
     handleLoadBasetableDataSource(keyword) {
-      this.stores.deviceinformation.sources.basetableSources.loading = true;
+      this.stores.worktask.sources.basetableSources.loading = true;
       let query = { keyword: keyword };
       findbasetableDataSourceByKeyword(query).then(res => {
 
-        this.stores.deviceinformation.sources.basetableSources.data = res.data.data;
-        this.stores.deviceinformation.sources.basetableSources.loading = false;
+        this.stores.worktask.sources.basetableSources.data = res.data.data;
+        this.stores.worktask.sources.basetableSources.loading = false;
 
       });
     }

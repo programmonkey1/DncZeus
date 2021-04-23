@@ -25,7 +25,6 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
     {
         private readonly DncZeusDbContext _dbContext;
         private readonly IMapper _mapper;
-
         /// <summary>
         /// 
         /// </summary>
@@ -48,30 +47,51 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             var response = ResponseModelFactory.CreateResultInstance;
             using (_dbContext)
             {
-                 var query = _dbContext.DncWorkTask.AsQueryable();
-                
-                 if (!string.IsNullOrEmpty(payload.Kw))
-                 {
-                     query = query.Where(x => x.TaskPerson.Contains(payload.Kw.Trim()) || x.Code.Contains(payload.Kw.Trim()));
-                 }
-                 if (payload.IsDeleted > CommonEnum.IsDeleted.All)
-                 {
-                     query = query.Where(x => x.IsDeleted == payload.IsDeleted);
-                 }
-                 if (payload.Status > CommonEnum.Status.All)
-                 {
-                     query = query.Where(x => x.Status == payload.Status);
-                 }
-                
-                var list = query.OrderBy(x => x.TaskTime).Paged(payload.CurrentPage, payload.PageSize).ToList();
-                 var totalCount = query.Count();
-                 var data = list.Select(_mapper.Map<DncWorkTask, WorkTaskJsonModel>);
+                //var list = _dbContext.DncWorkTask.ToList();
+                var query = _dbContext.DncWorkTask.AsQueryable();
+                if (!string.IsNullOrEmpty(payload.Kw))
+                {
+                    query = query.Where(x => x.TaskPerson.Contains(payload.Kw.Trim()) || x.Code.Contains(payload.Kw.Trim()));
+                }
+                if (payload.IsDeleted > CommonEnum.IsDeleted.All)
+                {
+                    query = query.Where(x => x.IsDeleted == payload.IsDeleted);
+                }
+                if (payload.Status > CommonEnum.Status.All)
+                {
+                    query = query.Where(x => x.Status == payload.Status);
+                }
+                List<string> timeList = new List<string>();
+                string daylist = null;
+                var list = query.Paged(payload.CurrentPage, payload.PageSize).ToList();
 
-                 response.SetData(data, totalCount);
-                 return Ok(response);
+                for (int i = 0; i < list.ToArray().Length; i++)
+                {
+                    //2021-04-08 - 2021-04-28
 
+                    //首先保证 rq1<=rq2
+                    DateTime time1 = Convert.ToDateTime(list[i].CompletionTime.Substring(0, 10));
+                    DateTime time2 = Convert.ToDateTime(list[i].CompletionTime.Substring(13, 10));
+                    while (time1 <= time2)
+                    {
+                        timeList.Add(time1.ToString("yyyy-MM-dd"));
+                        time1 = time1.AddDays(1);
+                    }
+                    for (int z = 0; z < timeList.ToArray().Length; z++)
+                    {
+                        daylist += timeList[z].Substring(8, 2) + " ";
+                    }
+                    list[i].TaskPlan = daylist;
+                }
+                var totalCount = query.Count();
+                //获取list中的值对DncWorkTask赋值
+                var data = list.Select(_mapper.Map<DncWorkTask, WorkTaskJsonModel>);
+
+                response.SetData(data, totalCount);
+                return Ok(response);
             }
         }
+       
 
         /// <summary>
         /// 
@@ -186,7 +206,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 entity.TaskTime = DateTime.Now;
                 entity.CompletionTime = model.CompletionTime;
                 entity.TaskPlan = model.TaskPlan;
-                entity.ProgressDeviation = model.ProgressDeviation;          
+                entity.ProgressDeviation = model.ProgressDeviation;
                 entity.InformationNote = model.InformationNote;
                 entity.ThirdPartyCooperation = model.ThirdPartyCooperation;
                 entity.MattersNeedingAttention = model.MattersNeedingAttention;
