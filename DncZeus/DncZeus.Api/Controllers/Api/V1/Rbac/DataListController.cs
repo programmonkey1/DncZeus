@@ -1,8 +1,12 @@
-﻿using DncZeus.Api.Entities;
+﻿using AutoMapper;
+using DncZeus.Api.Entities;
 using DncZeus.Api.Extensions;
+using DncZeus.Api.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace DncZeus.Api.Controllers.api.v1
@@ -16,54 +20,81 @@ namespace DncZeus.Api.Controllers.api.v1
     public class DataListController : ControllerBase
     {
         private readonly DncZeusDbContext _dbContext;
-        public DataListController(DncZeusDbContext dbContext)
+        private readonly IMapper _mapper;
+        public DataListController(DncZeusDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
         [HttpGet]
         public IActionResult List()
         {
             using (_dbContext)
             {
-                var timelist = _dbContext.DataList.ToList();
+                _dbContext.Database.ExecuteSqlCommand("DELETE FROM DataList");
                 var planlist = _dbContext.DncWorkTask.ToList();
                 List<string> daylist = new List<string>();
                 List<string> delaylist = new List<string>();
                 DateTime nowday = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd"));
                 for (int cleari = 0; cleari < planlist.ToArray().Length; cleari++)
                 {
-                    timelist[cleari].No1 = 0;
-                    timelist[cleari].No2 = 0;
-                    timelist[cleari].No3 = 0;
-                    timelist[cleari].No4 = 0;
-                    timelist[cleari].No5 = 0;
-                    timelist[cleari].No6 = 0;
-                    timelist[cleari].No7 = 0;
-                    timelist[cleari].No8 = 0;
-                    timelist[cleari].No9 = 0;
-                    timelist[cleari].No10 = 0;
-                    timelist[cleari].No11 = 0;
-                    timelist[cleari].No12 = 0;
-                    timelist[cleari].No13 = 0;
-                    timelist[cleari].No14 = 0;
-                    timelist[cleari].No15 = 0;
-                    timelist[cleari].No16 = 0;
-                    timelist[cleari].No17 = 0;
-                    timelist[cleari].No18 = 0;
-                    timelist[cleari].No19 = 0;
-                    timelist[cleari].No20 = 0;
-                    timelist[cleari].No21 = 0;
-                    timelist[cleari].No22 = 0;
-                    timelist[cleari].No23 = 0;
-                    timelist[cleari].No24 = 0;
-                    timelist[cleari].No25 = 0;
-                    timelist[cleari].No26 = 0;
-                    timelist[cleari].No27 = 0;
-                    timelist[cleari].No28 = 0;
-                    timelist[cleari].No29 = 0;
-                    timelist[cleari].No30 = 0;
-                    timelist[cleari].No31 = 0;
+                    //首先保证 time1<=time2
+                    DateTime day1 = Convert.ToDateTime(planlist[cleari].CompletionTime.Substring(0, 10));
+                    DateTime day2 = Convert.ToDateTime(planlist[cleari].CompletionTime.Substring(13, 10));
+                    string month = null;
+                    if (day1 <= day2)
+                    {
+                        if (int.Parse(day1.ToString("yyyy-MM-dd").Substring(5, 2)) < int.Parse(day2.ToString("yyyy-MM-dd").Substring(5, 2)))
+                        {
+                            month = day1.ToString("yyyy-MM-dd").Substring(0, 7) + " - " + day2.ToString("yyyy-MM-dd").Substring(0, 7);                          
+                        }
+                        else if (int.Parse(day1.ToString("yyyy-MM-dd").Substring(5, 2)) == int.Parse(day2.ToString("yyyy-MM-dd").Substring(5, 2)))
+                        {
+                            month = day2.ToString("yyyy-MM-dd").Substring(0, 7);                           
+                        }
+                    }
+                    DataListCreateViewModel model = new DataListCreateViewModel();
+                    var entity = _mapper.Map<DataListCreateViewModel, DataList>(model);
+                    entity.Id = cleari + 1;
+                    entity.Month = month;
+                    entity.No1 = 0;
+                    entity.No2 = 0;
+                    entity.No3 = 0;
+                    entity.No4 = 0;
+                    entity.No5 = 0;
+                    entity.No6 = 0;
+                    entity.No7 = 0;
+                    entity.No8 = 0;
+                    entity.No9 = 0;
+                    entity.No10 = 0;
+                    entity.No11 = 0;
+                    entity.No12 = 0;
+                    entity.No13 = 0;
+                    entity.No14 = 0;
+                    entity.No15 = 0;
+                    entity.No16 = 0;
+                    entity.No17 = 0;
+                    entity.No18 = 0;
+                    entity.No19 = 0;
+                    entity.No20 = 0;
+                    entity.No21 = 0;
+                    entity.No22 = 0;
+                    entity.No23 = 0;
+                    entity.No24 = 0;
+                    entity.No25 = 0;
+                    entity.No26 = 0;
+                    entity.No27 = 0;
+                    entity.No28 = 0;
+                    entity.No29 = 0;
+                    entity.No30 = 0;
+                    entity.No31 = 0;
+                    entity.IsDelete = 0;
+                    entity.Status = 0;
+                    entity.Code = RandomHelper.GetRandomizer(8, true, false, true, true);
+                    _dbContext.DataList.Add(entity);
+                    _dbContext.SaveChanges();
                 }
+                var timelist = _dbContext.DataList.ToList();
                 for (int i = 0; i < planlist.ToArray().Length; i++)
                 {
                     //2021-04-08 - 2021-04-28
@@ -71,15 +102,6 @@ namespace DncZeus.Api.Controllers.api.v1
                     //首先保证 time1<=time2
                     DateTime day1 = Convert.ToDateTime(planlist[i].CompletionTime.Substring(0, 10));
                     DateTime day2 = Convert.ToDateTime(planlist[i].CompletionTime.Substring(13, 10));
-                    if (day1 <= day2) {
-                        if (int.Parse(day1.ToString("yyyy-MM-dd").Substring(5, 2)) < int.Parse(day2.ToString("yyyy-MM-dd").Substring(5, 2)))
-                        {
-                            timelist[i].Month = day1.ToString("yyyy-MM-dd").Substring(0, 7) + " - " + day2.ToString("yyyy-MM-dd").Substring(0, 7);
-                        } else if(int.Parse(day1.ToString("yyyy-MM-dd").Substring(5, 2)) == int.Parse(day2.ToString("yyyy-MM-dd").Substring(5, 2)))
-                        {
-                            timelist[i].Month = day2.ToString("yyyy-MM-dd").Substring(0, 7);
-                        }
-                    }
 
                     if (day1 <= nowday && nowday <= day2)
                     {
@@ -483,8 +505,6 @@ namespace DncZeus.Api.Controllers.api.v1
                             }
                         }
                     }
-                    
-                    
                 }
 
                 var response = ResponseModelFactory.CreateInstance;

@@ -1,3 +1,29 @@
+<style>
+    .ivu-table .demo-table-info-row td{
+        background-color: #2db7f5;
+        color: #fff;
+    }
+    .ivu-table .demo-table-error-row td{
+        background-color: #ff6600;
+        color: #fff;
+    }
+    .ivu-table td.demo-table-info-column{
+        background-color: #2db7f5;
+        color: #fff;
+    }
+    .ivu-table .demo-table-info-cell-name {
+        background-color: #2db7f5;
+        color: #fff;
+    }
+    .ivu-table .demo-table-info-cell-age {
+        background-color: #ff6600;
+        color: #fff;
+    }
+    .ivu-table .demo-table-info-cell-address {
+        background-color: #187;
+        color: #fff;
+    }
+</style>
 <template>
   <div>
     <Card>
@@ -99,8 +125,8 @@
               <Button icon="md-create"
                       type="primary"
                       @click="handleShowCreateWindow"
-                      title="新增角色">
-                新增角色
+                      title="新增主题">
+                新增主题
               </Button>
               </Col>
             </Row>
@@ -244,6 +270,7 @@ import {
   } from "@/api/rbac/worktask";
   import { findEcutableDataSourceByKeyword } from "@/api/rbac/ECUTable";
   import { findbasetableDataSourceByKeyword } from "@/api/rbac/basetable";
+
 export default {
     name: "rbac_worktask_page",
   components: {
@@ -346,7 +373,7 @@ export default {
             render:(h,params)=>{
                         let workType = params.row.workType
                         if(workType==0){
-                            workType = '重要任务'
+                            workType = '重要任务'   
                         }else if(workType==1){
                             workType = '一般任务'
                         }else if(workType ==2){
@@ -355,42 +382,37 @@ export default {
                         return h('span',workType)
                     },
             },
-            { title: "1",
-             key: "nO1", 
-             width: 30, 
-             ellipsis: true, 
-             tooltip: true,
-            },
-            { title: "2", key: "nO2", width: 30, ellipsis: true, tooltip: true },
-            { title: "3", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "4", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "5", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "6", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "7", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "8", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "9", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "10", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "11", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "12", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "13", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "14", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "15", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "16", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "17", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "18", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "19", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "20", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "21", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "22", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "23", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "24", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "25", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "26", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "27", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "28", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "29", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "30", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
-            { title: "31", key: "taskPlan", width: 30, ellipsis: true, tooltip: true },
+            { title: "1", key: "no1", width: 30, ellipsis: true, tooltip: true },
+            { title: "2", key: "no2", width: 30, ellipsis: true, tooltip: true },
+            { title: "3", key: "no3", width: 30, ellipsis: true, tooltip: true },
+            { title: "4", key: "no4", width: 30, ellipsis: true, tooltip: true },
+            { title: "5", key: "no5", width: 30, ellipsis: true, tooltip: true },
+            { title: "6", key: "no6", width: 30, ellipsis: true, tooltip: true },
+            { title: "7", key: "no7", width: 30, ellipsis: true, tooltip: true },
+            { title: "8", key: "no8", width: 30, ellipsis: true, tooltip: true },
+            { title: "9", key: "no9", width: 30, ellipsis: true, tooltip: true },
+            { title: "10", key: "no10", width: 30, ellipsis: true, tooltip: true },
+            { title: "11", key: "no11", width: 30, ellipsis: true, tooltip: true },
+            { title: "12", key: "no12", width: 30, ellipsis: true, tooltip: true },
+            { title: "13", key: "no13", width: 30, ellipsis: true, tooltip: true },
+            { title: "14", key: "no14", width: 30, ellipsis: true, tooltip: true },
+            { title: "15", key: "no15", width: 30, ellipsis: true, tooltip: true },
+            { title: "16", key: "no16", width: 30, ellipsis: true, tooltip: true },
+            { title: "17", key: "no17", width: 30, ellipsis: true, tooltip: true },
+            { title: "18", key: "no18", width: 30, ellipsis: true, tooltip: true },
+            { title: "19", key: "no19", width: 30, ellipsis: true, tooltip: true },
+            { title: "20", key: "no20", width: 30, ellipsis: true, tooltip: true },
+            { title: "21", key: "no21", width: 30, ellipsis: true, tooltip: true },
+            { title: "22", key: "no22", width: 30, ellipsis: true, tooltip: true },
+            { title: "23", key: "no23", width: 30, ellipsis: true, tooltip: true },
+            { title: "24", key: "no24", width: 30, ellipsis: true, tooltip: true },
+            { title: "25", key: "no25", width: 30, ellipsis: true, tooltip: true },
+            { title: "26", key: "no26", width: 30, ellipsis: true, tooltip: true },
+            { title: "27", key: "no27", width: 30, ellipsis: true, tooltip: true },
+            { title: "28", key: "no28", width: 30, ellipsis: true, tooltip: true },
+            { title: "29", key: "no29", width: 30, ellipsis: true, tooltip: true },
+            { title: "30", key: "no30", width: 30, ellipsis: true, tooltip: true },
+            { title: "31", key: "no31", width: 30, ellipsis: true, tooltip: true },
             { title: "任务人", key: "taskPerson", width: 80, sortable: true, ellipsis: true, tooltip: true },
             { title: "联系电话", key: "telephone", width: 100, ellipsis: true, tooltip: true },
             { title: "任务时间", key: "taskTime", width: 150, sortable: true, ellipsis: true, tooltip: true },
@@ -438,12 +460,20 @@ export default {
         console.log(res.data.data )
         this.stores.worktask.query.totalCount = res.data.totalCount;
       });
-      gettimeList(this.stores.datalist.query).then(res => {
-        this.stores.datalist.data = res.data.data;
+      gettimeList(this.stores.worktask.query).then(res => { 
+        this.stores.worktask.data = res.data.data;
         console.log(res.data.data )
-        this.stores.datalist.query.totalCount = res.data.totalCount;
+        this.stores.worktask.query.totalCount = res.data.totalCount;
       });
     },
+    loadtimeList(){
+      gettimeList(this.stores.worktask.query).then(res => { 
+        this.stores.worktask.data = res.data.data;
+        console.log(res.data.data )
+        this.stores.worktask.query.totalCount = res.data.totalCount;
+      });
+    },
+    
     exportData() {
       this.$refs.tables.exportCsv({
         filename: "电子单元信息",
@@ -649,6 +679,7 @@ export default {
 
       });
     }
+    
   },
   mounted() {
     this.loadRoleList();

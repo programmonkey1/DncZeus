@@ -38,7 +38,10 @@ namespace DncZeus.Api.Entities
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Month).HasColumnName("month");
+                entity.Property(e => e.Month)
+                    .HasColumnName("month")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.No1).HasColumnName("NO1");
 

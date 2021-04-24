@@ -9,11 +9,11 @@
               :border="false"
               size="small"
               search-place="top"
-              v-model="stores.Ceshi.data"
-              :totalCount="stores.Ceshi.query.totalCount"
-              :columns="stores.Ceshi.columns"
-              @on-delete=""
-              @on-edit=""
+              v-model="stores.datatime.data"
+              :totalCount="stores.datatime.query.totalCount"
+              :columns="stores.datatime.columns"
+              @on-delete="handleDelete"
+              @on-edit="handleEdit"
               @on-select="handleSelect"
               @on-selection-change="handleSelectionChange"
               @on-refresh="handleRefresh"
@@ -29,7 +29,7 @@
                   <Input type="text"
                          search
                          :clearable="true"
-                         v-model="stores.Ceshi.query.kw"
+                         v-model="stores.datatime.query.kw"
                          placeholder="输入关键字搜索..."
                          @on-search="handleSearchRole()">
 
@@ -65,18 +65,17 @@
 <script>
 import Tables from "_c/tables";
 import {
-    getCeshiSelect,
-    getRoleList
-  } from "@/api/rbac/Ceshi";
+    getdatatimeList,
+  } from "@/api/rbac/datatime";
   export default {
-    name: "	rbac_Ceshi_page",
+    name: "	rbac_datetime_page",
     components: {
       Tables
     },
     data() {
       return {
         stores: {
-          Ceshi: {
+          datatime: {
             query: {
               totalCount: 0,
               pageSize: 20,
@@ -108,37 +107,11 @@ import {
               ]
             },
             columns: [
-              { type: "selection", width: 50, key: "handle" },
-              { title: "数据库名称", key: "a", width: 250, sortable: true },
-              { title: "客户名称", key: "b", width: 200, sortable: true },
-              { title: "设备数量", key: "c", width: 100, sortable: true },
-              { title: "成功数量", key: "d", width: 100, sortable: true },
-              { title: "失败数量", key: "e", width: 100, sortable: true },
-              { title: "离线数量", key: "F", width: 100, sortable: true },
-              { title: "未知数量", key: "G", width: 100, sortable: true },
-              { title: "七天抄表率", key: "G", width: 100, sortable: true },
-              
-              { title: "一月抄表率", key: "G", width: 100, sortable: true },
-              { title: "两月抄表率", key: "G", width: 100, sortable: true },
-              { title: "三月抄表率", key: "G", width: 100, sortable: true },
-              { title: "今天", key: "G", width: 100, sortable: true },
-              { title: "一天前", key: "G", width: 80, sortable: true },
-              { title: "两天前", key: "G", width: 80, sortable: true },
-              { title: "三天前", key: "G", width: 80, sortable: true },
-              { title: "四天前", key: "G", width: 80, sortable: true },
-              { title: "五天前", key: "G", width: 80, sortable: true },
-              { title: "六天前", key: "G", width: 80, sortable: true },
-              { title: "七天前", key: "G", width: 80, sortable: true },
-              { title: "一周前", key: "G", width: 80, sortable: true },
-              { title: "两周前", key: "G", width: 80, sortable: true },
-              { title: "三周前", key: "G", width: 80, sortable: true },
-              { title: "一月前", key: "G", width: 80, sortable: true },
-              { title: "两月前", key: "G", width: 80, sortable: true },
-              { title: "三月前", key: "G", width: 80, sortable: true },
-              
-              { title: "正在通讯", key: "G", width: 100, sortable: true },
-              { title: "占线", key: "G", width: 80, sortable: true },
-              
+              { type: "selection", width: 40, key: "handle" },
+              { title: "重点工作", key: "no1", width: 200, sortable: true },
+             
+              { title: "主要举措", key: "no2", width: 200, sortable: true },
+              { title: "实施进度", key: "nO3",width: 180, sortable: true,},  
               {
                 title: "操作",
                 align: "center",
@@ -248,31 +221,25 @@ import {
       }
     },
     methods: {
-      Ceshielect() {
-        getCeshiSelect(this.stores.Ceshi.query).then(res => {
-          this.stores.Ceshi.data = res.data.data;
-          this.stores.Ceshi.query.totalCount = res.data.totalCount;
-        });
-      },
       exportData() {
         this.$refs.tables.exportCsv({
-          filename: "测试",
+          filename: "任务列表",
           original: false,
-          columns: this.stores.Ceshi.columns,
-          data: this.stores.Ceshi.data
+          columns: this.stores.datatime.columns,
+          data: this.stores.datatime.data
         });
       },
-      CeshiList() {
-        getRoleList(this.stores.Ceshi.query).then(res => {
-          this.stores.Ceshi.data = res.data.data;
-          this.stores.Ceshi.query.totalCount = res.data.totalCount;
+      datatimeList() {
+        getdatatimeList(this.stores.datatime.query).then(res => {
+          this.stores.datatime.data = res.data.data;
+          this.stores.datatime.query.totalCount = res.data.totalCount;
         });
       },
       handleRefresh() {
-        this.CeshiSelect();
+        this.datatimeList();
       },
       handleSearchRole() {
-        this.CeshiSelect();
+        this.datatimeList();
       },
       rowClsRender(row, index) {
         if (row.isDeleted) {
@@ -281,16 +248,16 @@ import {
         return "";
       },
       handlePageChanged(page) {
-        this.stores.Ceshi.query.currentPage = page;
-        this.CeshiList();
+        this.stores.datatime.query.currentPage = page;
+        this.datatimeList();
       },
       handlePageSizeChanged(pageSize) {
-        this.stores.Ceshi.query.pageSize = pageSize;
-        this.CeshiList();
+        this.stores.datatime.query.pageSize = pageSize;
+        this.datatimeList();
       }
     },
     mounted() {
-      this.CeshiList();
+      this.datatimeList();
     }
   };
 
