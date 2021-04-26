@@ -16,7 +16,6 @@ namespace DncZeus.Api.Entities
         public string CompletionTime { get; set; }
         public string TaskPlan { get; set; }
         public string PlanList { get; set; }
-        /*public string Month { get; set; }
         public int? No1 { get; set; }
         public int? No2 { get; set; }
         public int? No3 { get; set; }
@@ -47,7 +46,7 @@ namespace DncZeus.Api.Entities
         public int? No28 { get; set; }
         public int? No29 { get; set; }
         public int? No30 { get; set; }
-        public int? No31 { get; set; }*/
+        public int? No31 { get; set; }
         public DateTime? ProgressDeviation { get; set; }
         public string InformationNote { get; set; }
         public string ThirdPartyCooperation { get; set; }

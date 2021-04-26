@@ -15,7 +15,7 @@ namespace DncZeus.Api.Entities
         {
         }
 
-        public virtual DbSet<DataList> DataList { get; set; }
+        public virtual DbSet<DncWorkTask> DncWorkTask { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,18 +28,26 @@ namespace DncZeus.Api.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DataList>(entity =>
+            modelBuilder.Entity<DncWorkTask>(entity =>
             {
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.Code)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CompletionTime)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Month)
-                    .HasColumnName("month")
+                entity.Property(e => e.InformationNote)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MattersNeedingAttention)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -104,6 +112,46 @@ namespace DncZeus.Api.Entities
                 entity.Property(e => e.No8).HasColumnName("NO8");
 
                 entity.Property(e => e.No9).HasColumnName("NO9");
+
+                entity.Property(e => e.PlanList)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ProgressDeviation).HasColumnType("datetime2(2)");
+
+                entity.Property(e => e.ProjectManager)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Publisher)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TaskContent)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TaskPerson)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TaskPlan)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TaskTheme)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TaskTime).HasColumnType("datetime2(2)");
+
+                entity.Property(e => e.Telephone)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ThirdPartyCooperation)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
         }
     }

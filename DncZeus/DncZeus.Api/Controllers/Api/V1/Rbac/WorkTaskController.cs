@@ -49,79 +49,19 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             using (_dbContext)
             {
                 //var list = _dbContext.DncWorkTask.ToList();
-                //给datalist表清空并赋值
-               /* _dbContext.Database.ExecuteSqlCommand("DELETE FROM DataList");
-                var planlist = _dbContext.DncWorkTask.ToList();
                 List<string> daylist = new List<string>();
                 List<string> delaylist = new List<string>();
                 DateTime nowday = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd"));
-                for (int cleari = 0; cleari < planlist.ToArray().Length; cleari++)
-                {
-                    //首先保证 time1<=time2
-                    DateTime day1 = Convert.ToDateTime(planlist[cleari].CompletionTime.Substring(0, 10));
-                    DateTime day2 = Convert.ToDateTime(planlist[cleari].CompletionTime.Substring(13, 10));
-                    string month = null;
-                    if (day1 <= day2)
-                    {
-                        if (int.Parse(day1.ToString("yyyy-MM-dd").Substring(5, 2)) < int.Parse(day2.ToString("yyyy-MM-dd").Substring(5, 2)))
-                        {
-                            month = day1.ToString("yyyy-MM-dd").Substring(0, 7) + " - " + day2.ToString("yyyy-MM-dd").Substring(0, 7);
-                        }
-                        else if (int.Parse(day1.ToString("yyyy-MM-dd").Substring(5, 2)) == int.Parse(day2.ToString("yyyy-MM-dd").Substring(5, 2)))
-                        {
-                            month = day2.ToString("yyyy-MM-dd").Substring(0, 7);
-                        }
-                    }
-                    DataListCreateViewModel model = new DataListCreateViewModel();
-                    var entity = _mapper.Map<DataListCreateViewModel, DataList>(model);
-                    entity.Id = cleari + 1;
-                    entity.Month = month;
-                    entity.No1 = 0;
-                    entity.No2 = 0;
-                    entity.No3 = 0;
-                    entity.No4 = 0;
-                    entity.No5 = 0;
-                    entity.No6 = 0;
-                    entity.No7 = 0;
-                    entity.No8 = 0;
-                    entity.No9 = 0;
-                    entity.No10 = 0;
-                    entity.No11 = 0;
-                    entity.No12 = 0;
-                    entity.No13 = 0;
-                    entity.No14 = 0;
-                    entity.No15 = 0;
-                    entity.No16 = 0;
-                    entity.No17 = 0;
-                    entity.No18 = 0;
-                    entity.No19 = 0;
-                    entity.No20 = 0;
-                    entity.No21 = 0;
-                    entity.No22 = 0;
-                    entity.No23 = 0;
-                    entity.No24 = 0;
-                    entity.No25 = 0;
-                    entity.No26 = 0;
-                    entity.No27 = 0;
-                    entity.No28 = 0;
-                    entity.No29 = 0;
-                    entity.No30 = 0;
-                    entity.No31 = 0;
-                    entity.IsDelete = 0;
-                    entity.Status = 0;
-                    entity.Code = RandomHelper.GetRandomizer(8, true, false, true, true);
-                    _dbContext.DataList.Add(entity);
-                    _dbContext.SaveChanges();
-                }
+                
                 //对日期做判断
-                var timelist = _dbContext.DataList.ToList();
-                for (int i = 0; i < planlist.ToArray().Length; i++)
+                var timelist = _dbContext.DncWorkTask.ToList();
+                for (int i = 0; i < timelist.ToArray().Length; i++)
                 {
                     //2021-04-08 - 2021-04-28
 
                     //首先保证 time1<=time2
-                    DateTime day1 = Convert.ToDateTime(planlist[i].CompletionTime.Substring(0, 10));
-                    DateTime day2 = Convert.ToDateTime(planlist[i].CompletionTime.Substring(13, 10));
+                    DateTime day1 = Convert.ToDateTime(timelist[i].CompletionTime.Substring(0, 10));
+                    DateTime day2 = Convert.ToDateTime(timelist[i].CompletionTime.Substring(13, 10));
 
                     if (day1 <= nowday && nowday <= day2)
                     {
@@ -526,7 +466,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                             }
                         }
                     }
-                }*/
+                }
 
                 var query = _dbContext.DncWorkTask.AsQueryable();
                 if (!string.IsNullOrEmpty(payload.Kw))
@@ -592,7 +532,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         public ActionResult Create(WorkTaskCreateViewModel model)
         {
             var response = ResponseModelFactory.CreateInstance;
-            if (model.TaskContent.Trim().Length <= 0)
+            if (model.TaskTheme.Trim().Length <= 0)
             {
                 response.SetFailed("请输入主题");
                 return Ok(response);
