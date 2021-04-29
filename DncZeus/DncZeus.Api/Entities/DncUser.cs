@@ -109,4 +109,7 @@ namespace DncZeus.Api.Entities
         /// </summary>
         Normal =1
     }
+    /// <summary>
+    /// 用户完成状态
+    /// </summary>
 }

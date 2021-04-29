@@ -30,13 +30,19 @@ namespace DncZeus.Api.Entities
         {
             modelBuilder.Entity<DncWorkTask>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Code)
                     .IsRequired()
                     .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CompletionEndTime)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CompletionFirstTime)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.CompletionTime)
@@ -117,7 +123,9 @@ namespace DncZeus.Api.Entities
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ProgressDeviation).HasColumnType("datetime2(2)");
+                entity.Property(e => e.ProgressDeviation)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.ProjectManager)
                     .HasMaxLength(50)
@@ -143,7 +151,9 @@ namespace DncZeus.Api.Entities
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.TaskTime).HasColumnType("datetime2(2)");
+                entity.Property(e => e.TaskTime)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Telephone)
                     .HasMaxLength(50)

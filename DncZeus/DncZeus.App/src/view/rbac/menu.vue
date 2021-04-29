@@ -740,7 +740,7 @@ export default {
       });
     },
     validateMenuForm() {
-      let _valid = false;
+      let _valid = true;
       this.$refs["formMenu"].validate(valid => {
         if (!valid) {
           this.$Message.error("请完善表单信息");

@@ -21,6 +21,7 @@ export default {
     pro: 'http://192.168.1.217:54321/',
     defaultPrefix:"api/v1/"
   },
+
   authUrl: {
     dev: 'http://192.168.1.217:54321/api/oauth/auth',
     pro: 'http://192.168.1.217:54321/api/oauth/auth'

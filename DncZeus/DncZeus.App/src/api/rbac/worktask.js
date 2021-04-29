@@ -32,7 +32,16 @@ export const loadWorkTask = (data) => {
   })
 }
 
-// editRole
+//finishWorkTask
+export const finishWorkTask = (data) => {
+  return axios.request({
+    url: 'rbac/worktask/finished/',
+    method: 'post',
+    data
+  })
+}
+
+// editWorkTask
 export const editWorkTask = (data) => {
   return axios.request({
     url: 'rbac/worktask/edit',

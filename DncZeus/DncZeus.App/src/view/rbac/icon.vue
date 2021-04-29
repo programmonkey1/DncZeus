@@ -563,7 +563,7 @@ export default {
       });
     },
     validateIconForm() {
-      let _valid = false;
+      let _valid = true;
       this.$refs["formIcon"].validate(valid => {
         if (!valid) {
           this.$Message.error("请完善表单信息");

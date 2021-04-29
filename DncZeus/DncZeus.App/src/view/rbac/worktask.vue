@@ -39,7 +39,7 @@
         :columns="stores.worktask.columns"
         @on-delete="handleDelete"
         @on-edit="handleEdit"
-        @on-Submit-edit="handleShowSubmitWindow"
+        @on-Submit-edit="handleSubmitEdit"
         @on-select="handleSelect"
         @on-selection-change="handleSelectionChange"
         @on-refresh="handleRefresh"
@@ -176,7 +176,7 @@
       :mask="true"
       :styles="styles"
     >
-    <Form
+      <Form
         :model="formModel.fields"
         ref="formRole"
         :rules="formModel.rules"
@@ -210,12 +210,24 @@
             </FormItem>
           </Col>
           <Col span="12">
-            <FormItem label="完成时间节点">
-              <DatePicker v-model="formModel.fields.completionTime"
-                type="daterange"
+            <FormItem label="完成时间节点" >
+              <DatePicker
+                v-model="formModel.fields.completionFirstTime"
+                format="yyyy-MM-dd"
+                type="date"
                 confirm
                 placement="bottom-end"
-                placeholder="清选择时间节点"
+                placeholder="清选择开始时间"
+                @on-change="getnowTime"
+              ></DatePicker>
+              <DatePicker
+                v-model="formModel.fields.completionendTime"
+                format="yyyy-MM-dd"
+                type="date"
+                confirm
+                placement="bottom-end"
+                placeholder="清选择结束时间"
+                @on-change="getnowTime"
               ></DatePicker>
             </FormItem>
           </Col>
@@ -278,14 +290,14 @@
           icon="md-checkmark-circle"
           type="primary"
           @click="handleSubmitRole"
-          >提 交</Button
-        >
+          >提 交
+        </Button>
         <Button
           style="margin-left: 8px"
           icon="md-close"
           @click="formSubmitModel.opened = false"
-          >取 消</Button
-        >
+          >取 消
+        </Button>
       </div>
     </Drawer>
     <Drawer
@@ -302,98 +314,58 @@
         :rules="formSubmitModel.rules"
         label-position="left"
       >
-        <Row :gutter="32">
-          <Col span="12">
-            <FormItem
-              label="进度偏离"
-              prop="dateOfManufacture"
-              label-position="left"
-            >
-              <Input
-                v-model="formSubmitModel.fields.dateOfManufacture"
-                placeholder="请输入偏离日期"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="32">
-          <Col span="12">
-            <FormItem label="查询电子单元产品编号">
-              <Select
-                v-model="formSubmitModel.fields.Ecutableindex"
-                filterable
-                clearable
-                remote
-                @on-change="handleEcutablekeyword"
-                :remote-method="handleLoadEcutableDataSource"
-                :loading="stores.worktask.sources.ecutableSources.loading"
-                placeholder="请选择电子单元产品编号..."
-              >
-                <Option
-                  v-for="(item, Ecutableindex) in stores.worktask.sources
-                    .ecutableSources.data"
-                  :value="Ecutableindex"
-                  :label="item.electronicUnitNumber"
-                  :key="Ecutableindex"
-                >
-                  ID:{{ item.ecuid }}|| 编号：{{ item.electronicUnitNumber }}||
-                  时间：{{ item.dateOfManufacture }}
-                </Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem label="查询水表批次编号">
-              <Select
-                v-model="formSubmitModel.fields.Basetableindex"
-                filterable
-                clearable
-                remote
-                @on-change="handleBasetablekeyword"
-                :remote-method="handleLoadBasetableDataSource"
-                :loading="stores.worktask.sources.basetableSources.loading"
-                placeholder="请选择水表批次编号..."
-              >
-                <Option
-                  v-for="(item, Basetableindex) in stores.worktask.sources
-                    .basetableSources.data"
-                  :value="Basetableindex"
-                  :label="item.batchNumber"
-                  :key="Basetableindex"
-                >
-                  ID:{{ item.btid }}|| 编号：{{ item.batchNumber }}|| 时间：{{
-                    item.dateOfManufacture
-                  }}
-                </Option>
-              </Select>
-            </FormItem>
-          </Col>
-        </Row>
-        <FormItem label="设备状态" label-position="left">
-          <i-switch
-            size="large"
-            v-model="formSubmitModel.fields.status"
-            :true-value="1"
-            :false-value="0"
-          >
-            <span slot="open">正常</span>
-            <span slot="close">禁用</span>
-          </i-switch>
-        </FormItem>
-        <FormItem label="备注" label-position="top">
+        <RadioGroup v-model="formSubmitModel.fields.progressDeviation" v-if="formSubmitModel.fields.progressDeviation === '正在完成中'">
+          <Radio
+            label="提前完成" 
+          ></Radio>
+          <Radio
+            label="按期完成" disabled
+          ></Radio>
+          <Radio
+            label="延期完成" disabled
+          ></Radio>
+        </RadioGroup>
+        <RadioGroup v-model="formSubmitModel.fields.progressDeviation" v-if="formSubmitModel.fields.progressDeviation === '任务最后一天'">
+          <Radio
+            label="提前完成" disabled
+          ></Radio>
+          <Radio
+            label="按期完成"
+          ></Radio>
+          <Radio
+            label="延期完成" disabled
+          ></Radio>
+        </RadioGroup>
+        <RadioGroup v-model="formSubmitModel.fields.progressDeviation" v-if="formSubmitModel.fields.progressDeviation === '已逾期'">
+          <Radio
+            label="提前完成" disabled
+          ></Radio>
+          <Radio
+            label="按期完成" disabled
+          ></Radio>
+          <Radio
+            label="延期完成" 
+          ></Radio>
+        </RadioGroup>
+        <RadioGroup v-model="formSubmitModel.fields.progressDeviation" v-if="formSubmitModel.fields.progressDeviation === '提前完成'|| formSubmitModel.fields.progressDeviation === '按期完成' || formSubmitModel.fields.progressDeviation === '延期完成'">
+          <Radio
+            label="提前完成" disabled
+          ></Radio>
+          <Radio
+            label="按期完成" disabled
+          ></Radio>
+          <Radio
+            label="延期完成" disabled
+          ></Radio>
+        </RadioGroup>
+
+
+        <FormItem label="情况说明" label-position="top">
           <Input
             type="textarea"
-            v-model="formSubmitModel.fields.remarks"
-            :rows="4"
-            placeholder="备注信息"
-          />
-        </FormItem>
-        <FormItem label="实际完成情况说明" label-position="top">
-          <Input
-            type="textarea"
-            v-model="formModel.fields.remarks"
+            v-model="formSubmitModel.fields.informationNote"
             :rows="2"
-            placeholder="请输入实际完成情况说明"
+            placeholder="请输入情况说明"
           />
         </FormItem>
       </Form>
@@ -401,8 +373,8 @@
         <Button
           icon="md-checkmark-circle"
           type="primary"
-          @click="handleSubmitRole"
-          >保 存</Button
+          @click="handleeditsubmit"
+          >完 成</Button
         >
         <Button
           style="margin-left: 8px"
@@ -451,6 +423,14 @@ export default {
           label: "次要工作",
         },
       ],
+      // 年月日
+      //computedDate(val) {
+      // if (val) {
+      // return moment(val).format("YYYY-MM-DD");
+      //}
+      // return "";
+      //},
+
       commands: {
         delete: { name: "delete", title: "删除" },
         recover: { name: "recover", title: "恢复" },
@@ -461,6 +441,7 @@ export default {
         opened: false,
         title: "创建",
         mode: "create",
+        valid: true,
         selection: [],
         selectOption: {
           ecutable: {},
@@ -468,32 +449,68 @@ export default {
         //model内容
         fields: {
           //主题
-          taskTheme:"",
+          taskTheme: "",
           //任务内容
-          taskContent:"",
+          taskContent: "",
           //任务类型
-          workType:"",
+          workType: "",
           //完成时间节点
-          completionTime:"",
+          completionFirstTime: "",
+          //完成时间节点-开始
+          completionEndTime: "",
+          //完成时间节点-结束
+          completionTime: "",
           //任务人
-          taskPerson:"",
+          taskPerson: "",
           //联系电话
-          telephone:"",
-          taskplan:"",
-          planlist:"",
-          informationCode:"",
+          telephone: "",
+          taskplan: "",
+          planlist: "",
+          informationCode: "",
           //项目经理
-          projectManager:"",
+          projectManager: "",
           //发布人
-          publisher:"",
+          publisher: "",
           //第三方配合事项
-          thirdPartyCooperation:"",
+          thirdPartyCooperation: "",
           //注意事项
-          mattersNeedingAttention:"",
+          mattersNeedingAttention: "",
+          // no1: 0,
+          // no2: 0,
+          // no3: 0,
+          // no4: 0,
+          // no5: 0,
+          // no6: 0,
+          // no7: 0,
+          // no8: 0,
+          // no9: 0,
+          // no10: 0,
+          // no11: 0,
+          // no12: 0,
+          // no13: 0,
+          // no14: 0,
+          // no15: 0,
+          // no16: 0,
+          // no17: 0,
+          // no18: 0,
+          // no19: 0,
+          // no20: 0,
+          // no21: 0,
+          // no22: 0,
+          // no23: 0,
+          // no24: 0,
+          // no25: 0,
+          // no26: 0,
+          // no27: 0,
+          // no28: 0,
+          // no29: 0,
+          // no30: 0,
+          // no31: 0,
 
-          status: 1,
+          status: 0,
           isDeleted: 0,
-          code:"",
+          isFinished: 0,
+          code: "",
         },
         rules: {
           name: [
@@ -515,21 +532,8 @@ export default {
           ecutable: {},
         },
         fields: {
-          Ecutableindex: 0,
-          Basetableindex: 0,
           id: "",
-          eunumber: "",
-          productModel: "LXSY-",
-          ecuid: "",
-          electronicUnitNumber: "",
-          btid: "",
-          batchNumber: "",
-          dateOfManufacture: "2021-03-07",
-
-          remarks: "",
-
-          status: 1,
-          isDeleted: 0,
+          progressDeviation: "",
         },
         rules: {
           name: [
@@ -1965,7 +1969,7 @@ export default {
             {
               title: "进度偏离",
               key: "progressDeviation",
-              width: 150,
+              width: 100,
               ellipsis: true,
               tooltip: true,
             },
@@ -2014,6 +2018,54 @@ export default {
               button: [
                 (h, params, vm) => {
                   return h(
+                    "Poptip",
+                    {
+                      props: {
+                        confirm: true,
+                        title: "你确定要删除吗?",
+                      },
+                      on: {
+                        "on-ok": () => {
+                          vm.$emit("on-delete", params);
+                        },
+                      },
+                    },
+                    [
+                      h(
+                        "Tooltip",
+                        {
+                          props: {
+                            placement: "left",
+                            transfer: true,
+                            delay: 1000,
+                          },
+                        },
+                        [
+                          h("Button", {
+                            props: {
+                              shape: "circle",
+                              size: "small",
+                              icon: "md-trash",
+                              type: "error",
+                            },
+                          }),
+                          h(
+                            "p",
+                            {
+                              slot: "content",
+                              style: {
+                                whiteSpace: "normal",
+                              },
+                            },
+                            "删除"
+                          ),
+                        ]
+                      ),
+                    ]
+                  );
+                },
+                (h, params, vm) => {
+                  return h(
                     "Tooltip",
                     {
                       props: {
@@ -2032,7 +2084,6 @@ export default {
                         },
                         on: {
                           click: () => {
-                            //vm.$emit("handleShowSubmitWindow",params);
                             vm.$emit("on-Submit-edit", params);
                             vm.$emit("input", params.tableData);
                           },
@@ -2046,7 +2097,7 @@ export default {
                             whiteSpace: "normal",
                           },
                         },
-                        "编辑"
+                        "提交"
                       ),
                     ]
                   );
@@ -2134,6 +2185,9 @@ export default {
     handleCloseFormWindow() {
       this.formModel.opened = false;
     },
+    handleCloseSubmitFormWindow() {
+      this.formSubmitModel.opened = false;
+    },
     handleSwitchFormModeToCreate() {
       this.formModel.mode = "create";
     },
@@ -2144,15 +2198,19 @@ export default {
       this.formModel.mode = "edit";
       this.handleOpenFormWindow();
     },
+    handleSwitchFormSubmitModeToEdit() {
+      this.formSubmitModel.mode = "edit";
+      this.handleOpenFormWindowSubmit();
+    },
     handleEdit(params) {
       this.handleSwitchFormModeToEdit();
       this.handleResetFormRole();
       this.doLoadRole(params.row.id);
     },
     handleSubmitEdit(params) {
-      this.handleSwitchFormModeToEdit();
+      this.handleSwitchFormSubmitModeToEdit();
       this.handleResetFormSubmit();
-      this.doLoadRole(params.row.id);
+      this.doLoadsubmit(params.row.id);
     },
     handleSelect(selection, row) {},
     handleSelectionChange(selection) {
@@ -2167,18 +2225,18 @@ export default {
       this.handleOpenFormWindow();
       this.handleResetFormRole();
     },
-    handleShowSubmitWindow() {
-      this.handleSwitchFormModeToCreateSubmit();
-      this.handleOpenFormWindowSubmit();
-      this.handleResetFormSubmit();
-    },
+    // handleShowSubmitWindow() {
+    //   this.handleSwitchFormModeToCreateSubmit();
+    //   this.handleOpenFormWindowSubmit();
+    //   this.handleResetFormSubmit();
+    // },
 
-handleSaveRolePermissions() {
+    handleSaveRolePermissions() {
       var data = {
         roleCode: this.currentRoleCode,
-        permissions: this.selectedPermissions
+        permissions: this.selectedPermissions,
       };
-      assignPermission(data).then(response => {
+      assignPermission(data).then((response) => {
         var result = response.data;
         if (result.code == 200) {
           this.$Message.success(result.message);
@@ -2195,6 +2253,19 @@ handleSaveRolePermissions() {
         }
         if (this.formModel.mode === "edit") {
           this.doEditRole();
+        }
+      }
+    },
+    handleeditsubmit() {
+      let valid = this.validateRoleForm();
+      if (valid) {
+        if (this.formSubmitModel.mode === "create") {
+          this.doCreateRole();
+        }
+        if (this.formSubmitModel.mode === "edit") {
+          //this.dofinished();
+          //this.doEditRole();
+          this.doEditSubmit();
         }
       }
     },
@@ -2226,8 +2297,32 @@ handleSaveRolePermissions() {
         this.handleCloseFormWindow();
       });
     },
+    doEditSubmit() {
+      editWorkTask(this.formSubmitModel.fields).then((res) => {
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.loadRoleList();
+        } else {
+          this.$Message.warning(res.data.message);
+        }
+        this.handleCloseSubmitFormWindow();
+      });
+    },
+    // dofinished() {
+    //   finishWorkTask(this.formSubmitModel.fields).then((res) => {
+    //     if (res.data.code === 200) {
+    //       this.$Message.success(res.data.message);
+    //       this.loadRoleList();
+    //     } else {
+    //       this.$Message.warning(res.data.message);
+    //     }
+    //     this.handleCloseSubmitFormWindow();
+    //   });
+    // },
+
+    //[key: string]: Vue | Element | Vue[] | Element[];
     validateRoleForm() {
-      let _valid = false;
+      let _valid = true;
       this.$refs["formRole"].validate((valid) => {
         if (!valid) {
           this.$Message.error("请完善表单信息");
@@ -2239,8 +2334,8 @@ handleSaveRolePermissions() {
       return _valid;
     },
     validateSubmitForm() {
-      let _valid = false;
-      this.$refs["formSubmit"].validate((valid) => {
+      let _valid = true;
+      this.$refs["formRole"].validate((valid) => {
         if (!valid) {
           this.$Message.error("请完善提交信息");
           _valid = false;
@@ -2255,6 +2350,12 @@ handleSaveRolePermissions() {
         this.formModel.fields = res.data.data;
       });
     },
+    doLoadsubmit(id) {
+      loadWorkTask({ id: id }).then((res) => {
+        this.formSubmitModel.fields = res.data.data;
+      });
+    },
+
     handleDelete(params) {
       this.doDelete(params.row.id);
     },

@@ -12,7 +12,9 @@ namespace DncZeus.Api.Entities
         public int? WorkType { get; set; }
         public string TaskPerson { get; set; }
         public string Telephone { get; set; }
-        public DateTime? TaskTime { get; set; }
+        public string TaskTime { get; set; }
+        public string CompletionFirstTime { get; set; }
+        public string CompletionEndTime { get; set; }
         public string CompletionTime { get; set; }
         public string TaskPlan { get; set; }
         public string PlanList { get; set; }
@@ -47,12 +49,13 @@ namespace DncZeus.Api.Entities
         public int? No29 { get; set; }
         public int? No30 { get; set; }
         public int? No31 { get; set; }
-        public DateTime? ProgressDeviation { get; set; }
+        public string ProgressDeviation { get; set; }
         public string InformationNote { get; set; }
         public string ThirdPartyCooperation { get; set; }
         public string MattersNeedingAttention { get; set; }
         public string ProjectManager { get; set; }
         public string Publisher { get; set; }
+        public int? IsFinished { get; set; }
         public Status Status { get; set; }
         public IsDeleted IsDeleted { get; set; }
         public string Code { get; set; }
