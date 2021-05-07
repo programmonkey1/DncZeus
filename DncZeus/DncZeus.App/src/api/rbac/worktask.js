@@ -27,7 +27,7 @@ export const createWorkTask = (data) => {
 //loadWorkTask
 export const loadWorkTask = (data) => {
   return axios.request({
-    url: 'rbac/worktask/edit/' + data.id,
+    url: 'rbac/worktask/edit/' + data.code,
     method: 'get'
   })
 }
@@ -45,6 +45,14 @@ export const finishWorkTask = (data) => {
 export const editWorkTask = (data) => {
   return axios.request({
     url: 'rbac/worktask/edit',
+    method: 'post',
+    data
+  })
+}
+// progressdeviationedit
+export const progressdeviationedit = (data) => {
+  return axios.request({
+    url: 'rbac/worktask/progressdeviationedit',
     method: 'post',
     data
   })

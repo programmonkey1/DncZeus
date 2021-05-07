@@ -1,5 +1,10 @@
 <template>
-  <Form ref="loginForm" :model="form" :rules="rules" @keydown.enter.native="handleSubmit">
+  <Form
+    ref="loginForm"
+    :model="form"
+    :rules="rules"
+    @keydown.enter.native="handleSubmit"
+  >
     <FormItem prop="userName">
       <Input v-model="form.userName" placeholder="请输入用户名">
         <span slot="prepend">
@@ -14,12 +19,14 @@
         </span>
       </Input>
     </FormItem>
-    <FormItem label="测试账户">
-      <RadioGroup v-model="form.userType" type="button" @on-change="handleUserTypeChange">
-        <Radio label="超级管理员"></Radio>
-        <Radio label="普通用户"></Radio>
-      </RadioGroup>
-    </FormItem>
+    <RadioGroup
+      v-model="form.userType"
+      type="button"
+      @on-change="handleUserTypeChange"
+    >
+      <Radio label="普通用户"></Radio>
+      <Radio label="管理员登录"></Radio>
+    </RadioGroup>
     <FormItem>
       <Button
         :disabled="processing"
@@ -27,7 +34,8 @@
         type="primary"
         long
         :loading="loading"
-      >{{btnLoginText}}</Button>
+        >{{ btnLoginText }}</Button
+      >
     </FormItem>
     <p class="login-tip">欢迎使用DncZeus通用权限管理框架</p>
   </Form>
@@ -40,30 +48,30 @@ export default {
       type: Array,
       default: () => {
         return [{ required: true, message: "账号不能为空", trigger: "blur" }];
-      }
+      },
     },
     passwordRules: {
       type: Array,
       default: () => {
         return [{ required: true, message: "密码不能为空", trigger: "blur" }];
-      }
+      },
     },
     processing: {
       type: Boolean,
-      default: false
+      default: false,
     },
     loading: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       form: {
-        userName: '',
-        password: '',
-        userType: 1
-      }
+        userName: "",
+        password: "",
+        userType: 1,
+      },
     };
   },
   computed: {
@@ -73,32 +81,31 @@ export default {
     rules() {
       return {
         userName: this.userNameRules,
-        password: this.passwordRules
+        password: this.passwordRules,
       };
-    }
+    },
   },
   methods: {
     handleSubmit() {
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.$emit("on-success-valid", {
             userName: this.form.userName,
-            password: this.form.password
+            password: this.form.password,
           });
         }
       });
     },
-    handleUserTypeChange(val){
-      switch(val){
-        case "超级管理员":
+    handleUserTypeChange(val) {
+      switch (val) {
+        case "普通用户":
+          this.form.userName = "";
+          break;
+        case "管理员登录":
           this.form.userName = "administrator";
           break;
-        case "普通用户":
-        this.form.userName = "admin";
-        break;
       }
-      this.form.password = "111111";
-    }
-  }
+    },
+  },
 };
 </script>

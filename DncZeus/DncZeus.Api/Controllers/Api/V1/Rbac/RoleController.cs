@@ -46,7 +46,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         }
 
         /// <summary>
-        /// 
+        /// 用户列表
         /// </summary>
         /// <returns></returns>
         [HttpPost]

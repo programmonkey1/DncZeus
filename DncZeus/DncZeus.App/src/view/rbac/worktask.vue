@@ -506,7 +506,7 @@ export default {
           // no29: 0,
           // no30: 0,
           // no31: 0,
-
+          progressDeviation: "",
           status: 0,
           isDeleted: 0,
           isFinished: 0,
@@ -534,6 +534,11 @@ export default {
         fields: {
           id: "",
           progressDeviation: "",
+
+          status: 0,
+          isDeleted: 0,
+          isFinished: 0,
+          code: "",
         },
         rules: {
           name: [
@@ -591,14 +596,14 @@ export default {
           columns: [
             { type: "selection", width: 50, key: "handle" },
 
-            {
-              title: "序号",
-              key: "id",
-              width: 50,
-              sortable: true,
-              ellipsis: true,
-              tooltip: true,
-            },
+            // {
+            //   title: "序号",
+            //   key: "id",
+            //   width: 50,
+            //   sortable: true,
+            //   ellipsis: true,
+            //   tooltip: true,
+            // },
             {
               title: "主题",
               key: "taskTheme",
@@ -665,6 +670,15 @@ export default {
               },
             },
             {
+              title: "月份",
+              key: "taskPlan",
+              width: 50,
+              sortable: true,
+              ellipsis: true,
+              tooltip: true,
+              
+            },
+            {
               title: "1",
               key: "no1",
               width: 30,
@@ -701,6 +715,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no1 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -743,6 +770,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no2 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -783,6 +823,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no3 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -825,6 +878,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no4 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -865,6 +931,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no5 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -907,6 +986,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no6 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -947,6 +1039,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no7 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -989,6 +1094,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no8 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -1029,6 +1147,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no9 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -1071,6 +1202,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no10 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -1111,6 +1255,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no11 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -1153,6 +1310,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no12 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -1193,6 +1363,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no13 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -1235,6 +1418,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no14 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -1275,6 +1471,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no15 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -1317,6 +1526,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no16 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -1357,6 +1579,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no17 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -1399,6 +1634,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no18 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -1439,6 +1687,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no19 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -1481,6 +1742,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no20 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -1522,7 +1796,21 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no21 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
+                
               },
             },
             {
@@ -1562,6 +1850,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no22 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -1604,6 +1905,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no23 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -1644,6 +1958,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no24 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -1686,6 +2013,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no25 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -1726,6 +2066,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no26 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -1768,6 +2121,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no27 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -1808,6 +2174,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no28 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -1850,6 +2229,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no29 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -1891,6 +2283,19 @@ export default {
                     },
                     "🟥"
                   );
+                }else if (no30 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
+                  );
                 }
               },
             },
@@ -1931,6 +2336,19 @@ export default {
                       },
                     },
                     "🟥"
+                  );
+                }else if (no31 == 3) {
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "15px",
+                        padding: "0px 0px",
+                        cursor: "pointer",
+                        color: "#00FF00",
+                      },
+                    },
+                    "🟦"
                   );
                 }
               },
@@ -2023,6 +2441,7 @@ export default {
                       props: {
                         confirm: true,
                         title: "你确定要删除吗?",
+                        placement:"right",
                       },
                       on: {
                         "on-ok": () => {
@@ -2210,7 +2629,7 @@ export default {
     handleSubmitEdit(params) {
       this.handleSwitchFormSubmitModeToEdit();
       this.handleResetFormSubmit();
-      this.doLoadsubmit(params.row.id);
+      this.doLoadsubmit(params.row.code);
     },
     handleSelect(selection, row) {},
     handleSelectionChange(selection) {
@@ -2266,6 +2685,7 @@ export default {
           //this.dofinished();
           //this.doEditRole();
           this.doEditSubmit();
+          //this.doprogressdeviationedit();
         }
       }
     },
@@ -2297,6 +2717,18 @@ export default {
         this.handleCloseFormWindow();
       });
     },
+    doprogressdeviationedit() {
+      progressdeviationedit(this.formSubmitModel.fields).then((res) => {
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.loadRoleList();
+        } else {
+          this.$Message.warning(res.data.message);
+        }
+        this.handleCloseFormWindow();
+      });
+    },
+    
     doEditSubmit() {
       editWorkTask(this.formSubmitModel.fields).then((res) => {
         if (res.data.code === 200) {
@@ -2350,8 +2782,8 @@ export default {
         this.formModel.fields = res.data.data;
       });
     },
-    doLoadsubmit(id) {
-      loadWorkTask({ id: id }).then((res) => {
+    doLoadsubmit(code) {
+      loadWorkTask({ code: code }).then((res) => {
         this.formSubmitModel.fields = res.data.data;
       });
     },
