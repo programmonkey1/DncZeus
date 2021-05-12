@@ -60,6 +60,7 @@ namespace DncZeus.Api.ViewModels.Rbac.DncWorkTask
         public int? IsFinished { get; set; }
         public Status Status { get; set; }
         public IsDeleted IsDeleted { get; set; }
+        public int? IsCreateMonth { get; set; }
         public string Code { get; set; }
     }
 }

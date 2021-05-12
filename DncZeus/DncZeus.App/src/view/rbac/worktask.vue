@@ -122,7 +122,26 @@
                   >
                 </Upload>
               </Col>
+              <!-- <Col span="12" class="dnc-toolbar-btns">
+              <Button
+                    icon="md-create"
+                    type="primary"
+                    @click="handleShowCreateWindow"
+                    title="新增主题"
+                  >
+                    新增主题
+                  </Button>
+              </Col> -->
               <Col span="18" class="dnc-toolbar-btns">
+                <router-link to="/rbac/monthly">
+                  <Button
+                    icon="md-create"
+                    type="primary"
+                    title="月结"
+                  >
+                    月结
+                  </Button>
+                </router-link>
                 <ButtonGroup class="mr3">
                   <Button
                     class="txt-danger"
@@ -210,7 +229,7 @@
             </FormItem>
           </Col>
           <Col span="12">
-            <FormItem label="完成时间节点" >
+            <FormItem label="完成时间节点">
               <DatePicker
                 v-model="formModel.fields.completionFirstTime"
                 format="yyyy-MM-dd"
@@ -314,58 +333,67 @@
         :rules="formSubmitModel.rules"
         label-position="left"
       >
-        <RadioGroup v-model="formSubmitModel.fields.progressDeviation" v-if="formSubmitModel.fields.progressDeviation === '正在完成中'">
-          <Radio
-            label="提前完成" 
-          ></Radio>
-          <Radio
-            label="按期完成" disabled
-          ></Radio>
-          <Radio
-            label="延期完成" disabled
-          ></Radio>
+        <RadioGroup
+          v-model="formSubmitModel.fields.progressDeviation"
+          v-if="formSubmitModel.fields.progressDeviation === '正在完成中'"
+        >
+          <Radio label="提前完成"></Radio>
+          <Radio label="按期完成" disabled></Radio>
+          <Radio label="延期完成" disabled></Radio>
         </RadioGroup>
-        <RadioGroup v-model="formSubmitModel.fields.progressDeviation" v-if="formSubmitModel.fields.progressDeviation === '任务最后一天'">
-          <Radio
-            label="提前完成" disabled
-          ></Radio>
-          <Radio
-            label="按期完成"
-          ></Radio>
-          <Radio
-            label="延期完成" disabled
-          ></Radio>
+        <RadioGroup
+          v-model="formSubmitModel.fields.progressDeviation"
+          v-if="formSubmitModel.fields.progressDeviation === '任务最后一天'"
+        >
+          <Radio label="提前完成" disabled></Radio>
+          <Radio label="按期完成"></Radio>
+          <Radio label="延期完成" disabled></Radio>
         </RadioGroup>
-        <RadioGroup v-model="formSubmitModel.fields.progressDeviation" v-if="formSubmitModel.fields.progressDeviation === '已逾期'">
-          <Radio
-            label="提前完成" disabled
-          ></Radio>
-          <Radio
-            label="按期完成" disabled
-          ></Radio>
-          <Radio
-            label="延期完成" 
-          ></Radio>
+        <RadioGroup
+          v-model="formSubmitModel.fields.progressDeviation"
+          v-if="formSubmitModel.fields.progressDeviation === '已逾期'"
+        >
+          <Radio label="提前完成" disabled></Radio>
+          <Radio label="按期完成" disabled></Radio>
+          <Radio label="延期完成"></Radio>
         </RadioGroup>
-        <RadioGroup v-model="formSubmitModel.fields.progressDeviation" v-if="formSubmitModel.fields.progressDeviation === '提前完成'|| formSubmitModel.fields.progressDeviation === '按期完成' || formSubmitModel.fields.progressDeviation === '延期完成'">
-          <Radio
-            label="提前完成" disabled
-          ></Radio>
-          <Radio
-            label="按期完成" disabled
-          ></Radio>
-          <Radio
-            label="延期完成" disabled
-          ></Radio>
+        <RadioGroup
+          v-model="formSubmitModel.fields.progressDeviation"
+          v-if="
+            formSubmitModel.fields.progressDeviation === '提前完成' ||
+            formSubmitModel.fields.progressDeviation === '按期完成' ||
+            formSubmitModel.fields.progressDeviation === '延期完成'
+          "
+        >
+          <Radio label="提前完成" disabled></Radio>
+          <Radio label="按期完成" disabled></Radio>
+          <Radio label="延期完成" disabled></Radio>
         </RadioGroup>
-
 
         <FormItem label="情况说明" label-position="top">
           <Input
             type="textarea"
             v-model="formSubmitModel.fields.informationNote"
-            :rows="2"
+            :rows="4"
             placeholder="请输入情况说明"
+          />
+        </FormItem>
+        <FormItem label="第三方配合事项" label-position="top">
+          <div id="div">
+            <Input
+              type="textarea"
+              v-model="formSubmitModel.fields.thirdPartyCooperation"
+              :rows="4"
+              placeholder="请输入第三方配合事项"
+            />
+          </div>
+        </FormItem>
+        <FormItem label="注意事项" label-position="top">
+          <Input
+            type="textarea"
+            v-model="formSubmitModel.fields.mattersNeedingAttention"
+            :rows="4"
+            placeholder="请输入注意事项"
           />
         </FormItem>
       </Form>
@@ -423,13 +451,6 @@ export default {
           label: "次要工作",
         },
       ],
-      // 年月日
-      //computedDate(val) {
-      // if (val) {
-      // return moment(val).format("YYYY-MM-DD");
-      //}
-      // return "";
-      //},
 
       commands: {
         delete: { name: "delete", title: "删除" },
@@ -534,6 +555,9 @@ export default {
         fields: {
           id: "",
           progressDeviation: "",
+          // ttaskOffice: '',
+          thirdPartyCooperation: "",
+          mattersNeedingAttention: "",
 
           status: 0,
           isDeleted: 0,
@@ -676,7 +700,6 @@ export default {
               sortable: true,
               ellipsis: true,
               tooltip: true,
-              
             },
             {
               title: "1",
@@ -716,7 +739,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no1 == 3) {
+                } else if (no1 == 3) {
                   return h(
                     "span",
                     {
@@ -770,7 +793,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no2 == 3) {
+                } else if (no2 == 3) {
                   return h(
                     "span",
                     {
@@ -824,7 +847,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no3 == 3) {
+                } else if (no3 == 3) {
                   return h(
                     "span",
                     {
@@ -878,7 +901,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no4 == 3) {
+                } else if (no4 == 3) {
                   return h(
                     "span",
                     {
@@ -932,7 +955,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no5 == 3) {
+                } else if (no5 == 3) {
                   return h(
                     "span",
                     {
@@ -986,7 +1009,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no6 == 3) {
+                } else if (no6 == 3) {
                   return h(
                     "span",
                     {
@@ -1040,7 +1063,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no7 == 3) {
+                } else if (no7 == 3) {
                   return h(
                     "span",
                     {
@@ -1094,7 +1117,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no8 == 3) {
+                } else if (no8 == 3) {
                   return h(
                     "span",
                     {
@@ -1148,7 +1171,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no9 == 3) {
+                } else if (no9 == 3) {
                   return h(
                     "span",
                     {
@@ -1202,7 +1225,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no10 == 3) {
+                } else if (no10 == 3) {
                   return h(
                     "span",
                     {
@@ -1256,7 +1279,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no11 == 3) {
+                } else if (no11 == 3) {
                   return h(
                     "span",
                     {
@@ -1310,7 +1333,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no12 == 3) {
+                } else if (no12 == 3) {
                   return h(
                     "span",
                     {
@@ -1364,7 +1387,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no13 == 3) {
+                } else if (no13 == 3) {
                   return h(
                     "span",
                     {
@@ -1418,7 +1441,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no14 == 3) {
+                } else if (no14 == 3) {
                   return h(
                     "span",
                     {
@@ -1472,7 +1495,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no15 == 3) {
+                } else if (no15 == 3) {
                   return h(
                     "span",
                     {
@@ -1526,7 +1549,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no16 == 3) {
+                } else if (no16 == 3) {
                   return h(
                     "span",
                     {
@@ -1580,7 +1603,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no17 == 3) {
+                } else if (no17 == 3) {
                   return h(
                     "span",
                     {
@@ -1634,7 +1657,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no18 == 3) {
+                } else if (no18 == 3) {
                   return h(
                     "span",
                     {
@@ -1688,7 +1711,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no19 == 3) {
+                } else if (no19 == 3) {
                   return h(
                     "span",
                     {
@@ -1742,7 +1765,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no20 == 3) {
+                } else if (no20 == 3) {
                   return h(
                     "span",
                     {
@@ -1796,7 +1819,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no21 == 3) {
+                } else if (no21 == 3) {
                   return h(
                     "span",
                     {
@@ -1810,7 +1833,6 @@ export default {
                     "🟦"
                   );
                 }
-                
               },
             },
             {
@@ -1851,7 +1873,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no22 == 3) {
+                } else if (no22 == 3) {
                   return h(
                     "span",
                     {
@@ -1905,7 +1927,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no23 == 3) {
+                } else if (no23 == 3) {
                   return h(
                     "span",
                     {
@@ -1959,7 +1981,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no24 == 3) {
+                } else if (no24 == 3) {
                   return h(
                     "span",
                     {
@@ -2013,7 +2035,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no25 == 3) {
+                } else if (no25 == 3) {
                   return h(
                     "span",
                     {
@@ -2067,7 +2089,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no26 == 3) {
+                } else if (no26 == 3) {
                   return h(
                     "span",
                     {
@@ -2121,7 +2143,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no27 == 3) {
+                } else if (no27 == 3) {
                   return h(
                     "span",
                     {
@@ -2175,7 +2197,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no28 == 3) {
+                } else if (no28 == 3) {
                   return h(
                     "span",
                     {
@@ -2229,7 +2251,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no29 == 3) {
+                } else if (no29 == 3) {
                   return h(
                     "span",
                     {
@@ -2283,7 +2305,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no30 == 3) {
+                } else if (no30 == 3) {
                   return h(
                     "span",
                     {
@@ -2337,7 +2359,7 @@ export default {
                     },
                     "🟥"
                   );
-                }else if (no31 == 3) {
+                } else if (no31 == 3) {
                   return h(
                     "span",
                     {
@@ -2441,7 +2463,7 @@ export default {
                       props: {
                         confirm: true,
                         title: "你确定要删除吗?",
-                        placement:"right",
+                        placement: "right",
                       },
                       on: {
                         "on-ok": () => {
@@ -2568,7 +2590,6 @@ export default {
         this.stores.worktask.query.totalCount = res.data.totalCount;
       });
     },
-
     exportData() {
       this.$refs.tables.exportCsv({
         filename: "电子单元信息",
@@ -2580,7 +2601,7 @@ export default {
     handleFormatError(file) {
       this.$Notice.warning({
         title: "文件格式不正确",
-        desc: "文件 " + file.name + " 格式不正确，请上传.xls,.xlsx文件。",
+        desc: "文件 " + file.nasme + " 格式不正确，请上传.xls,.xlsx文件。",
       });
     },
     handleSuccess(res, file) {
@@ -2728,7 +2749,7 @@ export default {
         this.handleCloseFormWindow();
       });
     },
-    
+
     doEditSubmit() {
       editWorkTask(this.formSubmitModel.fields).then((res) => {
         if (res.data.code === 200) {
@@ -2785,6 +2806,8 @@ export default {
     doLoadsubmit(code) {
       loadWorkTask({ code: code }).then((res) => {
         this.formSubmitModel.fields = res.data.data;
+        res.data.data.thirdPartyCooperation = "";
+        res.data.data.mattersNeedingAttention = "";
       });
     },
 

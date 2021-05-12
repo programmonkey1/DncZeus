@@ -53,9 +53,7 @@ namespace DncZeus.Api.Entities
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.MattersNeedingAttention)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.MattersNeedingAttention).IsUnicode(false);
 
                 entity.Property(e => e.No1).HasColumnName("NO1");
 
@@ -159,9 +157,7 @@ namespace DncZeus.Api.Entities
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ThirdPartyCooperation)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.ThirdPartyCooperation).IsUnicode(false);
             });
         }
     }
