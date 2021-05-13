@@ -1429,7 +1429,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 {
                     if (monthtime == 1)
                     {
-                        for (int i = 0; i < monthtime; i++)
+                        for (int i = 0; i <= monthtime; i++)
                         {
                             if (i == 0)
                             {
@@ -1449,7 +1449,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                                 _dbContext.SaveChanges();
                                 response.SetSuccess();
                             }
-                            else if (i == monthtime - 1)
+                            if (i == 1)
                             {
                                 enddatetime = Convert.ToDateTime(model.CompletionEndTime);
                                 firsttime = enddatetime.AddDays(1 - enddatetime.Day).ToString("yyyy-MM-dd");
@@ -1631,8 +1631,8 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                         //entity.TaskPlan = model.TaskPlan;
                         entity.ProgressDeviation = model.ProgressDeviation;
                         entity.InformationNote = model.InformationNote;
-                        entity.ThirdPartyCooperation += "\r\n" + (DateTime.Now.ToString("yyyy-MM-dd") + ":" + model.ThirdPartyCooperation);
-                        entity.MattersNeedingAttention += "\r\n" + (DateTime.Now.ToString("yyyy-MM-dd") + ":" + model.MattersNeedingAttention);
+                        entity.ThirdPartyCooperation += "\r\n" + (DateTime.Now.ToString("yyyy-MM-dd") + ":" + model.AddThirdPartyCooperation);
+                        entity.MattersNeedingAttention += "\r\n" + (DateTime.Now.ToString("yyyy-MM-dd") + ":" + model.AddMattersNeedingAttention);
                         entity.ProjectManager = model.ProjectManager;
                         entity.Publisher = model.Publisher;
                         entity.IsDeleted = model.IsDeleted;

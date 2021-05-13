@@ -51,7 +51,9 @@ namespace DncZeus.Api.Entities
         public int? No31 { get; set; }
         public string ProgressDeviation { get; set; }
         public string InformationNote { get; set; }
+        public string AddThirdPartyCooperation { get; set; }
         public string ThirdPartyCooperation { get; set; }
+        public string AddMattersNeedingAttention { get; set; }
         public string MattersNeedingAttention { get; set; }
         public string ProjectManager { get; set; }
         public string Publisher { get; set; }

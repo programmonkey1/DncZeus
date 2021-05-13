@@ -32,6 +32,10 @@ namespace DncZeus.Api.Entities
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.AddMattersNeedingAttention).IsUnicode(false);
+
+                entity.Property(e => e.AddThirdPartyCooperation).IsUnicode(false);
+
                 entity.Property(e => e.Code)
                     .IsRequired()
                     .HasMaxLength(10)

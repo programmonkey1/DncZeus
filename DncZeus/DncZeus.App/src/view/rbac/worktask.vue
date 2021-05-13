@@ -133,15 +133,29 @@
                   </Button>
               </Col> -->
               <Col span="18" class="dnc-toolbar-btns">
-                <router-link to="/rbac/monthly">
-                  <Button
-                    icon="md-create"
-                    type="primary"
-                    title="月结"
-                  >
-                    月结
-                  </Button>
-                </router-link>
+                <Button
+                  icon="md-create"
+                  type="primary"
+                  @click="statistics = true"
+                  title="统计"
+                  >统计</Button
+                >
+                <Modal
+                  v-model="statistics"
+                  title="工作任务统计"
+                  ok-text="查看"
+                  cancel-text="取消"
+                >
+                  <RadioGroup vertical>
+                    <Radio label="提前完成:100个">
+                      100个
+                    </Radio>
+                    <Radio label="按期完成:100个"></Radio>
+                    <Radio label="延期完成:100个"></Radio>
+                    <Radio label="正在完成中:100个"></Radio>
+                    <Radio label="已逾期:100个"></Radio>
+                  </RadioGroup>
+                </Modal>
                 <ButtonGroup class="mr3">
                   <Button
                     class="txt-danger"
@@ -190,7 +204,7 @@
     <Drawer
       :title="formTitle"
       v-model="formModel.opened"
-      width="500"
+      width="600"
       :mask-closable="true"
       :mask="true"
       :styles="styles"
@@ -322,7 +336,7 @@
     <Drawer
       :title="formSubmit"
       v-model="formSubmitModel.opened"
-      width="400"
+      width="600"
       :mask-closable="true"
       :mask="true"
       :styles="styles"
@@ -333,6 +347,118 @@
         :rules="formSubmitModel.rules"
         label-position="left"
       >
+        <FormItem label="任务主题" label-position="top">
+          <Input
+            v-model="formSubmitModel.fields.taskTheme"
+            placeholder="请输入任务主题"
+            disabled
+          />
+        </FormItem>
+        <FormItem label="任务内容" label-position="top">
+          <Input
+            type="textarea"
+            v-model="formSubmitModel.fields.taskContent"
+            :rows="2"
+            placeholder="请输入任务内容"
+            disabled
+          />
+        </FormItem>
+        <Row :gutter="32">
+          <Col span="12">
+            <FormItem label="任务重要程度">
+              <Select v-model="formSubmitModel.fields.workType" disabled>
+                <Option
+                  v-for="item in workTypeList"
+                  :value="item.value"
+                  :key="item.value"
+                  >{{ item.label }}
+                </Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="完成时间节点">
+              <DatePicker
+                v-model="formSubmitModel.fields.completionFirstTime"
+                format="yyyy-MM-dd"
+                type="date"
+                confirm
+                disabled
+                placement="bottom-end"
+                placeholder="清选择开始时间"
+                @on-change="getnowTime"
+              ></DatePicker>
+              <DatePicker
+                v-model="formSubmitModel.fields.completionEndTime"
+                format="yyyy-MM-dd"
+                type="date"
+                confirm
+                disabled
+                placement="bottom-end"
+                placeholder="清选择结束时间"
+                @on-change="getnowTime"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row :gutter="32">
+          <Col span="12">
+            <FormItem label="任务人" label-position="top">
+              <Input
+                v-model="formSubmitModel.fields.taskPerson"
+                placeholder="请输入任务人"
+                disabled
+              />
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="联系电话" label-position="top">
+              <Input
+                v-model="formSubmitModel.fields.telephone"
+                placeholder="请输入联系电话"
+                disabled
+              />
+            </FormItem>
+          </Col>
+        </Row>
+        <Row :gutter="32">
+          <Col span="12">
+            <FormItem label="项目经理" label-position="top">
+              <Input
+                v-model="formSubmitModel.fields.projectManager"
+                placeholder="请输入项目经理"
+                disabled
+              />
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="发布人" label-position="top">
+              <Input
+                v-model="formSubmitModel.fields.publisher"
+                placeholder="请输入发布人"
+                disabled
+              />
+            </FormItem>
+          </Col>
+        </Row>
+        <FormItem label="第三方配合事项" label-position="top">
+          <Input
+            type="textarea"
+            v-model="formSubmitModel.fields.thirdPartyCooperation"
+            :rows="4"
+            placeholder="请输入第三方配合内容"
+            disabled
+          />
+        </FormItem>
+        <FormItem label="注意事项" label-position="top">
+          <Input
+            type="textarea"
+            v-model="formSubmitModel.fields.mattersNeedingAttention"
+            :rows="4"
+            placeholder="请输入注意事项"
+            disabled
+          />
+        </FormItem>
         <RadioGroup
           v-model="formSubmitModel.fields.progressDeviation"
           v-if="formSubmitModel.fields.progressDeviation === '正在完成中'"
@@ -382,7 +508,7 @@
           <div id="div">
             <Input
               type="textarea"
-              v-model="formSubmitModel.fields.thirdPartyCooperation"
+              v-model="formSubmitModel.fields.addthirdPartyCooperation"
               :rows="4"
               placeholder="请输入第三方配合事项"
             />
@@ -391,7 +517,7 @@
         <FormItem label="注意事项" label-position="top">
           <Input
             type="textarea"
-            v-model="formSubmitModel.fields.mattersNeedingAttention"
+            v-model="formSubmitModel.fields.addmattersNeedingAttention"
             :rows="4"
             placeholder="请输入注意事项"
           />
@@ -437,6 +563,7 @@ export default {
   },
   data() {
     return {
+      statistics: false,
       workTypeList: [
         {
           value: 0,
@@ -492,8 +619,12 @@ export default {
           projectManager: "",
           //发布人
           publisher: "",
+          //添加第三方配合事项
+          addthirdPartyCooperation: "",
           //第三方配合事项
           thirdPartyCooperation: "",
+          //添加注意事项
+          addmattersNeedingAttention: "",
           //注意事项
           mattersNeedingAttention: "",
           // no1: 0,
@@ -556,7 +687,13 @@ export default {
           id: "",
           progressDeviation: "",
           // ttaskOffice: '',
+          //添加第三方配合事项
+          addthirdPartyCooperation: "",
+          //第三方配合事项
           thirdPartyCooperation: "",
+          //添加注意事项
+          addmattersNeedingAttention: "",
+          //注意事项
           mattersNeedingAttention: "",
 
           status: 0,
@@ -635,6 +772,103 @@ export default {
               sortable: true,
               ellipsis: true,
               tooltip: true,
+            },
+            {
+              title: "操作",
+              align: "center",
+              key: "handle",
+              width: 150,
+              className: "table-command-column",
+              options: ["edit"],
+              button: [
+                (h, params, vm) => {
+                  return h(
+                    "Poptip",
+                    {
+                      props: {
+                        confirm: true,
+                        title: "你确定要删除吗?",
+                        placement: "right",
+                      },
+                      on: {
+                        "on-ok": () => {
+                          vm.$emit("on-delete", params);
+                        },
+                      },
+                    },
+                    [
+                      h(
+                        "Tooltip",
+                        {
+                          props: {
+                            placement: "left",
+                            transfer: true,
+                            delay: 1000,
+                          },
+                        },
+                        [
+                          h("Button", {
+                            props: {
+                              shape: "circle",
+                              size: "small",
+                              icon: "md-trash",
+                              type: "error",
+                            },
+                          }),
+                          h(
+                            "p",
+                            {
+                              slot: "content",
+                              style: {
+                                whiteSpace: "normal",
+                              },
+                            },
+                            "删除"
+                          ),
+                        ]
+                      ),
+                    ]
+                  );
+                },
+                (h, params, vm) => {
+                  return h(
+                    "Tooltip",
+                    {
+                      props: {
+                        placement: "left",
+                        transfer: true,
+                        delay: 1000,
+                      },
+                    },
+                    [
+                      h("Button", {
+                        props: {
+                          shape: "circle",
+                          size: "small",
+                          icon: "md-create",
+                          type: "primary",
+                        },
+                        on: {
+                          click: () => {
+                            vm.$emit("on-Submit-edit", params);
+                            vm.$emit("input", params.tableData);
+                          },
+                        },
+                      }),
+                      h(
+                        "p",
+                        {
+                          slot: "content",
+                          style: {
+                            whiteSpace: "normal",
+                          },
+                        },
+                        "提交"
+                      ),
+                    ]
+                  );
+                },
+              ],
             },
             {
               title: "任务内容",
@@ -2401,7 +2635,7 @@ export default {
             {
               title: "完成时间节点",
               key: "completionTime",
-              width: 150,
+              width: 180,
               ellipsis: true,
               tooltip: true,
             },
@@ -2447,103 +2681,6 @@ export default {
               width: 100,
               ellipsis: true,
               tooltip: true,
-            },
-            {
-              title: "操作",
-              align: "center",
-              key: "handle",
-              width: 150,
-              className: "table-command-column",
-              options: ["edit"],
-              button: [
-                (h, params, vm) => {
-                  return h(
-                    "Poptip",
-                    {
-                      props: {
-                        confirm: true,
-                        title: "你确定要删除吗?",
-                        placement: "right",
-                      },
-                      on: {
-                        "on-ok": () => {
-                          vm.$emit("on-delete", params);
-                        },
-                      },
-                    },
-                    [
-                      h(
-                        "Tooltip",
-                        {
-                          props: {
-                            placement: "left",
-                            transfer: true,
-                            delay: 1000,
-                          },
-                        },
-                        [
-                          h("Button", {
-                            props: {
-                              shape: "circle",
-                              size: "small",
-                              icon: "md-trash",
-                              type: "error",
-                            },
-                          }),
-                          h(
-                            "p",
-                            {
-                              slot: "content",
-                              style: {
-                                whiteSpace: "normal",
-                              },
-                            },
-                            "删除"
-                          ),
-                        ]
-                      ),
-                    ]
-                  );
-                },
-                (h, params, vm) => {
-                  return h(
-                    "Tooltip",
-                    {
-                      props: {
-                        placement: "left",
-                        transfer: true,
-                        delay: 1000,
-                      },
-                    },
-                    [
-                      h("Button", {
-                        props: {
-                          shape: "circle",
-                          size: "small",
-                          icon: "md-create",
-                          type: "primary",
-                        },
-                        on: {
-                          click: () => {
-                            vm.$emit("on-Submit-edit", params);
-                            vm.$emit("input", params.tableData);
-                          },
-                        },
-                      }),
-                      h(
-                        "p",
-                        {
-                          slot: "content",
-                          style: {
-                            whiteSpace: "normal",
-                          },
-                        },
-                        "提交"
-                      ),
-                    ]
-                  );
-                },
-              ],
             },
           ],
           data: [],
@@ -2664,6 +2801,33 @@ export default {
       this.handleSwitchFormModeToCreate();
       this.handleOpenFormWindow();
       this.handleResetFormRole();
+      //主题
+      this.formModel.fields.taskTheme = "";
+      //任务内容
+      this.formModel.fields.taskContent = "";
+      //任务类型
+      this.formModel.fields.workType = "";
+      //完成时间节点
+      this.formModel.fields.completionFirstTime = "";
+      //完成时间节点-开始
+      this.formModel.fields.completionEndTime = "";
+      //完成时间节点-结束
+      this.formModel.fields.completionTime = "";
+      //任务人
+      this.formModel.fields.taskPerson = "";
+      //联系电话
+      this.formModel.fields.telephone = "";
+      this.formModel.fields.taskplan = "";
+      this.formModel.fields.planlist = "";
+      this.formModel.fields.informationCode = "";
+      //项目经理
+      this.formModel.fields.projectManager = "";
+      //发布人
+      this.formModel.fields.publisher = "";
+      //第三方配合事项
+      this.formModel.fields.thirdPartyCooperation = "";
+      //注意事项
+      this.formModel.fields.mattersNeedingAttention = "";
     },
     // handleShowSubmitWindow() {
     //   this.handleSwitchFormModeToCreateSubmit();
@@ -2806,8 +2970,6 @@ export default {
     doLoadsubmit(code) {
       loadWorkTask({ code: code }).then((res) => {
         this.formSubmitModel.fields = res.data.data;
-        res.data.data.thirdPartyCooperation = "";
-        res.data.data.mattersNeedingAttention = "";
       });
     },
 
