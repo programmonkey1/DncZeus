@@ -143,17 +143,15 @@
                 <Modal
                   v-model="statistics"
                   title="工作任务统计"
-                  ok-text="查看"
-                  cancel-text="取消"
+                  @on-ok="ok"
+                  @on-cancel="cancel"
                 >
-                  <RadioGroup vertical>
-                    <Radio label="提前完成:100个">
-                      100个
-                    </Radio>
-                    <Radio label="按期完成:100个"></Radio>
-                    <Radio label="延期完成:100个"></Radio>
-                    <Radio label="正在完成中:100个"></Radio>
-                    <Radio label="已逾期:100个"></Radio>
+                  <RadioGroup vertical v-model="statisticaldata">
+                    <Radio label="提前完成"></Radio>
+                    <Radio label="按期完成"></Radio>
+                    <Radio label="延期完成"></Radio>
+                    <Radio label="正在完成中"></Radio>
+                    <Radio label="已逾期"></Radio>
                   </RadioGroup>
                 </Modal>
                 <ButtonGroup class="mr3">
@@ -496,7 +494,7 @@
           <Radio label="延期完成" disabled></Radio>
         </RadioGroup>
 
-        <FormItem label="情况说明" label-position="top">
+        <FormItem label="完成情况说明" label-position="top">
           <Input
             type="textarea"
             v-model="formSubmitModel.fields.informationNote"
@@ -504,7 +502,7 @@
             placeholder="请输入情况说明"
           />
         </FormItem>
-        <FormItem label="第三方配合事项" label-position="top">
+        <FormItem label="新增第三方配合事项" label-position="top">
           <div id="div">
             <Input
               type="textarea"
@@ -514,7 +512,7 @@
             />
           </div>
         </FormItem>
-        <FormItem label="注意事项" label-position="top">
+        <FormItem label="新增注意事项" label-position="top">
           <Input
             type="textarea"
             v-model="formSubmitModel.fields.addmattersNeedingAttention"
@@ -563,6 +561,7 @@ export default {
   },
   data() {
     return {
+      statisticaldata:"",
       statistics: false,
       workTypeList: [
         {
@@ -2713,6 +2712,17 @@ export default {
     },
   },
   methods: {
+    ok() {
+      this.loadkwList();
+    },
+    cancel() {},
+    loadkwList() {
+      findworktaskDataSourceByprogressdeviation(this.statisticaldata).then((res) => {
+        this.stores.worktask.data = res.data.data;
+        console.log(res.data.data);
+        this.stores.worktask.query.totalCount = res.data.totalCount;
+      });
+    },
     loadRoleList() {
       getWorkTaskList(this.stores.worktask.query).then((res) => {
         this.stores.worktask.data = res.data.data;
@@ -2972,6 +2982,11 @@ export default {
         this.formSubmitModel.fields = res.data.data;
       });
     },
+    // doLoadprogressdeviation(progressdeviation) {
+    //   loadWorkTask({ progressdeviation: progressdeviation }).then((res) => {
+    //     this.formModel.fields = res.data.data;
+    //   });
+    // },
 
     handleDelete(params) {
       this.doDelete(params.row.id);

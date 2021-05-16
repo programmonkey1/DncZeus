@@ -974,7 +974,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                             //}
                         }
                     }
-                    else if (timelist[i].IsFinished == 0 && timelist[i].PlanList.Contains('3'))
+                    else if (timelist[i].IsFinished == 0 && timelist[i].PlanList.Contains("3"))
                     {
                         timelist[i].ProgressDeviation = "正在完成中";
                         daylist.Clear();
@@ -1316,6 +1316,29 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         }
 
         /// <summary>
+        /// 统计
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/api/v1/rbac/worktask/find_list_by_progressdeviation/{kw}")]
+        public IActionResult FindDataByKeyword(string kw)
+        {
+            var response = ResponseModelFactory.CreateResultInstance;
+            if (string.IsNullOrEmpty(kw))
+            {
+                response.SetFailed("没有查询到数据");
+                return Ok(response);
+            }
+            using (_dbContext)
+            {
+                var query = _dbContext.DncWorkTask.Where(x => x.ProgressDeviation.Contains(kw));
+
+                var list = query.ToList();
+                response.SetData(list);
+                return Ok(response);
+            }
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
@@ -1330,7 +1353,6 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             }
             using (_dbContext)
             {
-
                 var query = _dbContext.DncWorkTask.Where(x => x.TaskContent.Contains(kw));
 
                 var list = query.ToList();
@@ -1615,9 +1637,10 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                     response.SetFailed("主题不存在");
                     return Ok(response);
                 }
-                if (_dbContext.DncWorkTask.Count(x => x.Code == model.Code) > 1)
+                int datacount = _dbContext.DncWorkTask.Count(x => x.Code == model.Code);
+                if (datacount > 1)
                 {
-                    for (int i = 0; i < _dbContext.DncWorkTask.Count(x => x.Code == model.Code); i++)
+                    for (int i = 0; i < datacount; i++)
                     {
                         List<DncWorkTask> entitylist = _dbContext.DncWorkTask.Where(x => x.Code == model.Code).ToList();
                         var entity = entitylist[i];
@@ -1638,7 +1661,13 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                         entity.IsDeleted = model.IsDeleted;
                         entity.Status = model.Status;
                         entity.Code = model.Code;
-                        entity.IsFinished = 1;
+                        if (entitylist[i].ProgressDeviation == "提前完成" || entitylist[i].ProgressDeviation == "按期完成" || entitylist[i].ProgressDeviation == "延期完成")
+                        {
+                            entity.IsFinished = 1;
+                        }
+                        else {
+                            entity.IsFinished = 0;
+                        }
                         _dbContext.SaveChanges();
                     }
                     return Ok(response);
@@ -1664,7 +1693,14 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                     entity.IsDeleted = model.IsDeleted;
                     entity.Status = model.Status;
                     entity.Code = model.Code;
-                    entity.IsFinished = 1;
+                    if (model.ProgressDeviation == "提前完成" || model.ProgressDeviation == "按期完成" || model.ProgressDeviation == "延期完成")
+                    {
+                        entity.IsFinished = 1;
+                    }
+                    else
+                    {
+                        entity.IsFinished = 0;
+                    }
                     _dbContext.SaveChanges();
                     return Ok(response);
                 }
