@@ -75,7 +75,7 @@ export const batchCommand = (data) => {
   })
 }
 
-export const findworktaskDataSourceByprogressdeviation = (kw) => {
+export const findworktaskByprogressdeviation = (kw) => {
   return axios.request({
     url: 'rbac/worktask/find_list_by_progressdeviation/' + kw,
     method: 'get'

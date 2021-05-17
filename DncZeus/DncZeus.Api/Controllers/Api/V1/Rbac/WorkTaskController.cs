@@ -1686,8 +1686,8 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                     entity.TaskPlan = model.TaskPlan;
                     entity.ProgressDeviation = model.ProgressDeviation;
                     entity.InformationNote = model.InformationNote;
-                    entity.ThirdPartyCooperation += "\r\n" + (DateTime.Now.ToString("yyyy-MM-dd") + ":" + model.ThirdPartyCooperation);
-                    entity.MattersNeedingAttention += "\r\n" + (DateTime.Now.ToString("yyyy-MM-dd") + ":" + model.MattersNeedingAttention);
+                    entity.ThirdPartyCooperation += "\r\n" + (DateTime.Now.ToString("yyyy-MM-dd") + ":" + model.AddThirdPartyCooperation);
+                    entity.MattersNeedingAttention += "\r\n" + (DateTime.Now.ToString("yyyy-MM-dd") + ":" + model.AddMattersNeedingAttention);
                     entity.ProjectManager = model.ProjectManager;
                     entity.Publisher = model.Publisher;
                     entity.IsDeleted = model.IsDeleted;

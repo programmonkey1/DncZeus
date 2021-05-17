@@ -252,7 +252,7 @@
                 @on-change="getnowTime"
               ></DatePicker>
               <DatePicker
-                v-model="formModel.fields.completionendTime"
+                v-model="formModel.fields.completionEndTime"
                 format="yyyy-MM-dd"
                 type="date"
                 confirm
@@ -2717,7 +2717,7 @@ export default {
     },
     cancel() {},
     loadkwList() {
-      findworktaskDataSourceByprogressdeviation(this.statisticaldata).then((res) => {
+      findworktaskByprogressdeviation(this.statisticaldata).then((res) => {
         this.stores.worktask.data = res.data.data;
         console.log(res.data.data);
         this.stores.worktask.query.totalCount = res.data.totalCount;
@@ -2817,11 +2817,11 @@ export default {
       this.formModel.fields.taskContent = "";
       //任务类型
       this.formModel.fields.workType = "";
-      //完成时间节点
-      this.formModel.fields.completionFirstTime = "";
       //完成时间节点-开始
-      this.formModel.fields.completionEndTime = "";
+      this.formModel.fields.completionFirstTime = "";
       //完成时间节点-结束
+      this.formModel.fields.completionEndTime = "";
+      
       this.formModel.fields.completionTime = "";
       //任务人
       this.formModel.fields.taskPerson = "";
